@@ -31,6 +31,7 @@ export default function Header() {
       href: '/pages',
       dropdown: [
         { name: 'Gallery', href: '/gallery' },
+        { name: 'Team', href: '/team' },
         { name: 'Events', href: '/event' },
         { name: 'Testimonials', href: '/testimonials' },
         { name: 'FAQ', href: '/faq' },

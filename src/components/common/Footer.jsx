@@ -1,4 +1,5 @@
 import React from 'react';
+import { href, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGraduationCap,
@@ -103,23 +104,93 @@ export default function Footer() {
             {/* Quick Links */}
             <div>
               <h3 className="text-lg font-bold text-white mb-6 pb-2 border-b border-blue-500/30">Quick Links</h3>
-              <ul className="space-y-3">
-                {['Home', 'About', 'Why Us', 'Team', 'Gallery', 'FAQ', 'Contact'].map((item) => (
-                  <li key={item}>
-                    <a 
-                      href={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
-                    >
-                      <FontAwesomeIcon 
-                        icon={faChevronRight} 
-                        className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
-                      />
-                      <span>{item}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+             <ul className="space-y-3">
+    <li>
+      <a 
+        href="/"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>Home</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/about"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>About</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/whyus"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>Why Us</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/team"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>Team</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/gallery"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>Gallery</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/faq"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>FAQ</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/contact"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>Contact</span>
+      </a>
+    </li>
+  </ul>
+</div>
             
             {/* Programs */}
             <div>
