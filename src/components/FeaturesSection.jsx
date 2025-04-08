@@ -12,7 +12,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { motion } from 'framer-motion'
 
-// Replace Heroicons with FontAwesome
 const features = [
   {
     title: 'Information',
@@ -91,11 +90,17 @@ export default function FeaturesSection() {
   return (
     <section
       id="features-section"
-      className="bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-white py-24"
+      className="bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-white py-12 md:py-16"
     >
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Explore Our Features</h2>
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-300 font-medium shadow mb-4">
+          <FontAwesomeIcon icon={faWandMagicSparkles} className="mr-2" />
+            Discover Tools
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
+            Explore Our Features
+          </h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
             A powerful suite of tools, services, and networks to support every student’s journey.
           </p>

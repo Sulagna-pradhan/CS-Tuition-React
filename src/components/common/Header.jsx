@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { href, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faBars, 
@@ -33,6 +33,7 @@ export default function Header() {
         { name: 'Gallery', href: '/gallery' },
         { name: 'Events', href: '/event' },
         { name: 'Testimonials', href: '/testimonials' },
+        { name: 'FAQ', href: '/faq' },
       ]
     },
     {
