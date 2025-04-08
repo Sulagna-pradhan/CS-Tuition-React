@@ -1,13 +1,85 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Bitlearning - Your premier destination for online education and interactive learning experiences. Master new skills with our comprehensive courses.">
+    <meta name="keywords" content="online learning, education platform, courses, e-learning, Bitlearning">
+    <meta name="author" content="Bitlearning">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/src/assets/icon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Title -->
+    <title>Bitlearning | Online Education Platform</title>
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Bitlearning | Online Education Platform">
+    <meta property="og:description" content="Your premier destination for online education and interactive learning experiences.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="#">
+    <meta property="og:image" content="#">
+    <meta property="og:site_name" content="Bitlearning">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bitlearning | Online Education Platform">
+    <meta name="twitter:description" content="Your premier destination for online education and interactive learning experiences.">
+    <meta name="twitter:image" content="#">
+    <meta name="twitter:site" content="@bitlearning">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bitlearning.com" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/src/main.jsx" as="script">
+    
+    <!-- Structured Data / Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "Bitlearning",
+      "url": "https://bitlearning.com",
+      "logo": "https://bitlearning.com/images/logo.png",
+      "description": "Online education platform offering comprehensive courses",
+      "sameAs": [
+        "https://facebook.com/bitlearning",
+        "https://twitter.com/bitlearning",
+        "https://linkedin.com/company/bitlearning"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Noscript fallback -->
+    <noscript>
+      <div style="text-align: center; padding: 2rem; background: #f8f9fa;">
+        <h1>Welcome to Bitlearning</h1>
+        <p>JavaScript is required to use this application. Please enable JavaScript to continue.</p>
+        <p>Alternatively, visit our <a href="https://bitlearning.com">main website</a>.</p>
+      </div>
+    </noscript>
+    
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Google Analytics (example) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
   </body>
 </html>

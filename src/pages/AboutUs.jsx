@@ -3,15 +3,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
-  faBriefcase,
-  faUsers,
-  faLightbulb,
-  faChartLine,
-  faGraduationCap,
-  faCheckCircle,
-  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
-import FAQ from "../components/FAQ";
 import Testimonials from "../components/Testimonials";
 import AboutSection from "../components/AboutSection";
 

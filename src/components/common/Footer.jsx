@@ -194,7 +194,7 @@ export default function Footer() {
             
             {/* Programs */}
             <div>
-              <h3 className="text-lg font-bold text-white mb-6 pb-2 border-b border-blue-500/30">Programs</h3>
+              <h3 className="text-lg font-bold text-white mb-6 pb-2 border-b border-blue-500/30">External Links</h3>
               <ul className="space-y-3">
                 {[
                   'Math Tutoring', 

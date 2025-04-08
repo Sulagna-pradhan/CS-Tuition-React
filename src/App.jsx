@@ -9,6 +9,8 @@ import Faq from "./pages/Faq";
 import WhyUs from "./pages/WhyUs";
 import Team from "./pages/Team";
 import Gallery from "./pages/Gallery";
+import Event from "./pages/Event";
+import Testimonial from "./pages/Testimonial";
 
 
 function App() {
@@ -26,6 +28,9 @@ function App() {
           <Route index path="whyus" element={<WhyUs />} />
           <Route index path="team" element={<Team />} />
           <Route index path="gallery" element={<Gallery />} />
+          <Route index path="event" element={<Event />} />
+          <Route index path="testimonial" element={<Testimonial />} />
+
 
 
 

@@ -33,7 +33,7 @@ export default function Header() {
         { name: 'Gallery', href: '/gallery' },
         { name: 'Team', href: '/team' },
         { name: 'Events', href: '/event' },
-        { name: 'Testimonials', href: '/testimonials' },
+        { name: 'Testimonials', href: '/testimonial' },
         { name: 'FAQ', href: '/faq' },
       ]
     },

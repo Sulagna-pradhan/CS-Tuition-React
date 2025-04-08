@@ -1,6 +1,6 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
-import { faHome } from "@fortawesome/free-solid-svg-icons"; // Import specific icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
 import FAQ from "../components/FAQ";
 
 const FAQPage = () => {
