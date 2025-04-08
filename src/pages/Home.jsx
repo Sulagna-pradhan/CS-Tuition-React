@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
-import ExamCategories from "../components/ExamCategories";
-import FeaturedPapers from "../components/FeaturedPapers";
-import RecentlyAdded from "../components/RecentlyAdded";
-import WhyChooseExamsPYQ from "../components/WhyChooseExamsPYQ";
+import AboutSection from "../components/AboutSection";
+import FeaturesSection from "../components/FeaturesSection";
+
 import Testimonials from "../components/Testimonials";
-import FAQ from "../components/FAQ";
 import Newsletter from "../components/Newsletter";
 import Loader from "../components/general/Loader";
 import GoToTopButton from "../components/general/GoToTopButton";
@@ -30,12 +28,9 @@ const Home = () => {
         <>
           {/* Hero Section */}
           <HeroSection />
-          <ExamCategories />
-          <FeaturedPapers />
-          <RecentlyAdded />
-          <WhyChooseExamsPYQ />
+          <AboutSection />
+          <FeaturesSection />
           <Testimonials />
-          <FAQ />
           <Newsletter />
           <GoToTopButton />
         </>
