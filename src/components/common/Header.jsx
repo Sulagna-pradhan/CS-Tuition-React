@@ -72,7 +72,7 @@ export default function Header() {
               </span>
             </div>
             <div className="transition-all duration-300">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">Bright Minds</h1>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-700 to-blue-500 bg-clip-text text-transparent">BitLearning</h1>
               <p className="text-xs text-gray-500 hidden sm:block group-hover:text-indigo-600 transition-colors">Excellence in Education</p>
             </div>
           </Link>

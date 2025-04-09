@@ -46,7 +46,7 @@ const FAQ = () => {
 
 <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-medium mb-4">
               <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
-              Our Story
+              Frequently Asked Questions
             </div>
 
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">

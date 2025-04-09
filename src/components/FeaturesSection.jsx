@@ -23,7 +23,7 @@ const features = [
     title: 'PDF Assets',
     icon: faFileLines,
     description: 'Download study materials, guides, and important documents.',
-    link: '#',
+    link: '/pdf',
   },
   {
     title: 'Resources & Features',
@@ -35,7 +35,7 @@ const features = [
     title: 'Events',
     icon: faCalendarDays,
     description: 'Stay updated with upcoming seminars, workshops & fests.',
-    link: '#',
+    link: '/event',
   },
   {
     title: 'Students Club',
@@ -95,7 +95,7 @@ export default function FeaturesSection() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-300 font-medium shadow mb-4">
-          <FontAwesomeIcon icon={faWandMagicSparkles} className="mr-2" />
+            <FontAwesomeIcon icon={faWandMagicSparkles} className="mr-2" />
             Discover Tools
           </div>
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
@@ -117,7 +117,7 @@ export default function FeaturesSection() {
             <motion.a
               href={feature.link}
               key={index}
-              className="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:shadow-lg hover:shadow-indigo-800/30 transition-all duration-300 group hover:bg-gray-800"
+              className="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:shadow-lg hover:shadow-indigo-800/30 transition-all duration-300 group hover:bg-gray-800 text-center flex flex-col items-center"
               variants={itemVariants}
             >
               <div className="flex items-center justify-center w-14 h-14 bg-indigo-600/10 border border-indigo-600 rounded-full mb-4">

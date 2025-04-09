@@ -11,6 +11,11 @@ import Team from "./pages/Team";
 import Gallery from "./pages/Gallery";
 import Event from "./pages/Event";
 import Testimonial from "./pages/Testimonial";
+import Features from "./pages/Features";
+import PDF from "./pages/PDF";
+import Syllabus from "./pages/pdf/Syllabus";
+import PYQ from "./pages/pdf/PYQ";
+
 
 
 function App() {
@@ -30,6 +35,11 @@ function App() {
           <Route index path="gallery" element={<Gallery />} />
           <Route index path="event" element={<Event />} />
           <Route index path="testimonial" element={<Testimonial />} />
+          <Route index path="features" element={<Features />}  />
+
+          <Route index path="pdf" element={<PDF />} />
+          <Route index path="/pdf/syllabus" element={<Syllabus />} />
+          <Route index path="/pdf/pyq" element={<PYQ />} />
 
 
 

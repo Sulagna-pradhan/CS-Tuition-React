@@ -81,16 +81,16 @@ export default function HeroSection() {
             </motion.div>
 
             <motion.h1 {...slideUp} className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-blue-400 to-purple-400 leading-tight">
-              Unlock Your Learning Potential With Expert Education
+              Unlock Your Learning Potential By Smart Education
             </motion.h1>
 
             <motion.p {...slideIn} className="text-lg text-gray-300 mb-8 max-w-lg">
-              Join our community of passionate learners and experienced educators. Discover courses designed to help you excel in today's competitive world.
+              Join our community of passionate students and experienced educator. Discover our features designed to help you excel in today's competitive world.
             </motion.p>
 
             <motion.div {...slideIn} className="flex flex-wrap gap-4 mb-8">
-              <a href="/courses" className="group flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-500 hover:to-blue-400 text-white rounded-lg font-medium shadow-lg shadow-indigo-900/40 transition-all hover:shadow-xl hover:shadow-indigo-900/60">
-                Explore Courses
+              <a href="/features" className="group flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-500 hover:to-blue-400 text-white rounded-lg font-medium shadow-lg shadow-indigo-900/40 transition-all hover:shadow-xl hover:shadow-indigo-900/60">
+                Explore Features
                 <FontAwesomeIcon icon={faArrowRight} className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
               </a>
 
