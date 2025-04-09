@@ -76,7 +76,7 @@ export default function HeroSection() {
             <motion.div {...fadeIn} className="mb-6">
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-900 text-indigo-200">
                 <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-indigo-400"></span>
-                Now Enrolling for Summer 2025
+                Now Enrolling For Year 2025
               </span>
             </motion.div>
 
@@ -129,7 +129,7 @@ export default function HeroSection() {
                     </div>
                     <div>
                       <div className="text-xs font-semibold text-gray-200">500+ Students</div>
-                      <div className="text-xs text-gray-400">Joined this month</div>
+                      <div className="text-xs text-gray-400">Joined this year</div>
                     </div>
                   </div>
                 </motion.div>
@@ -140,7 +140,7 @@ export default function HeroSection() {
                       <FontAwesomeIcon icon={faCheckCircle} className="h-6 w-6" />
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-gray-200">98% Success Rate</div>
+                      <div className="text-xs font-semibold text-gray-200">90% Success Rate</div>
                       <div className="text-xs text-gray-400">In final examinations</div>
                     </div>
                   </div>

@@ -194,31 +194,92 @@ export default function Footer() {
             
             {/* Programs */}
             <div>
-              <h3 className="text-lg font-bold text-white mb-6 pb-2 border-b border-blue-500/30">External Links</h3>
-              <ul className="space-y-3">
-                {[
-                  'Math Tutoring', 
-                  'Science Programs', 
-                  'Language Arts', 
-                  'Test Preparation', 
-                  'Coding Classes',
-                  'Summer Camps'
-                ].map((item) => (
-                  <li key={item}>
-                    <a 
-                      href={`/courses/${item.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
-                    >
-                      <FontAwesomeIcon 
-                        icon={faChevronRight} 
-                        className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
-                      />
-                      <span>{item}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+  <h3 className="text-lg font-bold text-white mb-6 pb-2 border-b border-blue-500/30">
+    External Links
+  </h3>
+  <ul className="space-y-3">
+    <li>
+      <a 
+        href="https://www.caluniv.ac.in/"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>University Of Calcutta</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="https://www.caluniv.ac.in/student/college.html"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>Affiliated Colleges</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="https://ndl.iitkgp.ac.in/"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>NDLI</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/comingsoon"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>Student Club</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/comingsoon"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>Join Community</span>
+      </a>
+    </li>
+    <li>
+      <a 
+        href="/comingsoon"
+        className="flex items-center text-gray-400 hover:text-blue-400 transition-colors duration-300 group"
+      >
+        <FontAwesomeIcon 
+          icon={faChevronRight} 
+          className="h-4 w-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" 
+        />
+        <span>University Result</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+
+
+
           </div>
           
           {/* Newsletter & Contact - Right Side */}
