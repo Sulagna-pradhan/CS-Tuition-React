@@ -51,6 +51,7 @@ const ContactUsPage = () => {
           <p className="max-w-2xl mx-auto text-lg text-gray-600">
             Whether you have a question, feedback, or just want to say hello, feel free to reach out. Our team is here to help!
           </p>
+          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

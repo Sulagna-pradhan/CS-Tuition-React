@@ -51,6 +51,7 @@ export default function AboutSection() {
           <p className="max-w-2xl mx-auto text-lg text-gray-600">
             Get to know our journey, values, and how we're shaping the future of education.
           </p>
+          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">

@@ -17,7 +17,7 @@ const features = [
     title: 'Information',
     icon: faGraduationCap,
     description: 'All essential academic and institutional info in one place.',
-    link: '/info',
+    link: '/infopage',
   },
   {
     title: 'PDF Assets',
@@ -29,7 +29,7 @@ const features = [
     title: 'Resources & Features',
     icon: faWandMagicSparkles,
     description: 'Explore tools and digital features to enhance learning.',
-    link: '#',
+    link: '/resources',
   },
   {
     title: 'Events',

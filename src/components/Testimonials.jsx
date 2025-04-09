@@ -62,6 +62,7 @@ const Testimonials = () => {
           <p className="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
             Success stories from students who used our platform
           </p>
+          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
         <div className="mt-10">

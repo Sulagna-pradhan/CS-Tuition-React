@@ -55,6 +55,7 @@ const FAQ = () => {
           <p className="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
             Find answers to common questions about our platform
           </p>
+          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
         <div className="mt-10 max-w-3xl mx-auto">

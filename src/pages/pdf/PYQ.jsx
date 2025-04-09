@@ -82,7 +82,7 @@ export default function CUPreviousYearPage() {
             <FontAwesomeIcon icon={faArrowRight} className="mr-2" />
             CU Previous Year Question Papers
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Subject-wise PYQs</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Subject-wise Previous Year Questions</h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
             Year-wise PDFs for each subject with quick actions.
           </p>

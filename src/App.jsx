@@ -15,7 +15,8 @@ import PDF from "./pages/PDF";
 import Syllabus from "./pages/pdf/Syllabus";
 import PYQ from "./pages/pdf/PYQ";
 import ComingSoon from "./pages/ComingSoon";
-
+import Resources from "./pages/Resources";
+import InfoPage from "./pages/InfoPage";
 
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
           <Route index path="/pdf/syllabus" element={<Syllabus />} />
           <Route index path="/pdf/pyq" element={<PYQ />} />
           <Route index path="comingsoon" element={<ComingSoon />} />
+          <Route index path="resources" element={<Resources />} />
+          <Route index path="infopage" element={<InfoPage />} />
 
 
 

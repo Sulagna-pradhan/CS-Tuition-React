@@ -11,19 +11,19 @@ export default function CUExamSyllabusPage() {
 
   const syllabusData = [
     {
-      name: 'Computer Science - Semester 1',
+      name: 'Semester 1',
       url: 'https://bitlearning.vercel.app/assets/pdf/syllabus/sem%201%20&%202%20syllabus.pdf'
     },
     {
-      name: 'Mathematics - Semester 2',
+      name: 'Semester 2',
       url: '/pdf/math-sem2.pdf'
     },
     {
-      name: 'Physics - Honors',
+      name: 'Semester 3',
       url: '/pdf/phy-hons.pdf'
     },
     {
-      name: 'Statistics - General',
+      name: 'Semester 4',
       url: '/pdf/stats-general.pdf'
     }
   ]
@@ -53,10 +53,10 @@ export default function CUExamSyllabusPage() {
             CU Exam Syllabus
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-            Download Subject-Wise Syllabus PDFs
+            Download Semester-Wise Syllabus PDFs
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
-            View and manage all available syllabus PDFs in one place.
+            View and manage all available Semester syllabus PDFs in one place.
           </p>
           <div className="w-24 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
