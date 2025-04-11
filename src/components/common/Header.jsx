@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { href, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faBars, 
@@ -7,13 +7,15 @@ import {
   faGraduationCap, 
   faArrowRight, 
   faBell, 
-  faChevronDown 
+  faChevronDown,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeSubDropdown, setActiveSubDropdown] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,6 +43,46 @@ export default function Header() {
       name: 'Features',
       href: '/features',
       dropdown: [
+        { 
+          name: 'PDF Tools', 
+          href: '/features/pdf',
+          subDropdown: [
+            { name: 'PDF Merger', href: '/features/pdf/merger' },
+            { name: 'PDF Splitter', href: '/features/pdf/splitter' },
+            { name: 'PDF to Word', href: '/features/pdf/to-word' },
+            { name: 'PDF Compressor', href: '/features/pdf/compressor' },
+          ]
+        },
+        { 
+          name: 'Productivity Tools', 
+          href: '/features/productivity',
+          subDropdown: [
+            { name: 'Task Manager', href: '/features/productivity/tasks' },
+            { name: 'Note Taking', href: '/features/productivity/notes' },
+            { name: 'Calendar', href: '/features/productivity/calendar' },
+            { name: 'Focus Timer', href: '/features/productivity/pomodoro' },
+          ]
+        },
+        { 
+          name: 'Academic Tools', 
+          href: '/features/academic',
+          subDropdown: [
+            { name: 'Citation Generator', href: '/features/academic/citations' },
+            { name: 'Plagiarism Checker', href: '/features/academic/plagiarism' },
+            { name: 'Flash Cards', href: '/features/academic/flashcards' },
+            { name: 'Study Planner', href: '/features/academic/planner' },
+          ]
+        },
+        { 
+          name: 'Dev Tools', 
+          href: '/features/dev',
+          subDropdown: [
+            { name: 'Code Formatter', href: '/features/dev/formatter' },
+            { name: 'JSON Validator', href: '/features/dev/json' },
+            { name: 'Color Picker', href: '/features/dev/colors' },
+            { name: 'Regex Tester', href: '/features/dev/regex' },
+          ]
+        },
         { name: 'Sticky Notes', href: '/features/sticky-notes' },
         { name: 'QR Code Generator', href: '/features/qr' },
         { name: 'Search System', href: '/features/search' }
@@ -48,6 +90,29 @@ export default function Header() {
     },
     { name: 'Contact Us', href: '/contact' },
   ];
+
+  // Handle mouse events for desktop dropdowns
+  const handleMouseEnter = (linkName, subMenuName = null) => {
+    setActiveDropdown(linkName);
+    setActiveSubDropdown(subMenuName);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveDropdown(null);
+    setActiveSubDropdown(null);
+  };
+
+  // Handle mobile dropdown clicks
+  const toggleMobileDropdown = (linkName) => {
+    setActiveDropdown(activeDropdown === linkName ? null : linkName);
+    setActiveSubDropdown(null);
+  };
+
+  const toggleMobileSubDropdown = (e, subMenuName) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setActiveSubDropdown(activeSubDropdown === subMenuName ? null : subMenuName);
+  };
 
   return (
     <header
@@ -80,9 +145,11 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">
             {navLinks.map((link) => (
-              <div key={link.name} className="relative"
-                onMouseEnter={() => link.dropdown && setActiveDropdown(link.name)}
-                onMouseLeave={() => setActiveDropdown(null)}
+              <div 
+                key={link.name} 
+                className="relative"
+                onMouseEnter={() => link.dropdown && handleMouseEnter(link.name)}
+                onMouseLeave={handleMouseLeave}
               >
                 <Link
                   to={link.href}
@@ -105,16 +172,50 @@ export default function Header() {
 
                 {/* Dropdown Menu */}
                 {link.dropdown && activeDropdown === link.name && (
-                  <div className="absolute left-0 mt-1 w-56 origin-top-left rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="absolute left-0 mt-1 w-56 origin-top-left rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-30">
                     <div className="py-1">
                       {link.dropdown.map((item) => (
-                        <Link
+                        <div 
                           key={item.name}
-                          to={item.href}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600"
+                          className="relative group"
+                          onMouseEnter={() => item.subDropdown && handleMouseEnter(link.name, item.name)}
                         >
-                          {item.name}
-                        </Link>
+                          <Link
+                            to={item.href}
+                            className={`flex justify-between items-center px-4 py-2 text-sm ${
+                              activeSubDropdown === item.name
+                                ? 'text-indigo-600 bg-indigo-50'
+                                : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600'
+                            }`}
+                          >
+                            {item.name}
+                            {item.subDropdown && (
+                              <FontAwesomeIcon 
+                                icon={faChevronRight} 
+                                className={`ml-1 h-3 w-3 transition-transform ${
+                                  activeSubDropdown === item.name ? 'rotate-90' : ''
+                                }`} 
+                              />
+                            )}
+                          </Link>
+
+                          {/* Sub-dropdown Menu */}
+                          {item.subDropdown && activeSubDropdown === item.name && (
+                            <div className="absolute left-full top-0 w-56 origin-top-left rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-30">
+                              <div className="py-1">
+                                {item.subDropdown.map((subItem) => (
+                                  <Link
+                                    key={subItem.name}
+                                    to={subItem.href}
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600"
+                                  >
+                                    {subItem.name}
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -159,7 +260,14 @@ export default function Header() {
                   <Link
                     to={link.href}
                     className="flex justify-between items-center px-4 py-3 text-gray-700 hover:text-indigo-600 font-medium rounded-lg hover:bg-gray-50"
-                    onClick={() => !link.dropdown && setMobileMenuOpen(false)}
+                    onClick={(e) => {
+                      if (link.dropdown) {
+                        e.preventDefault();
+                        toggleMobileDropdown(link.name);
+                      } else {
+                        setMobileMenuOpen(false);
+                      }
+                    }}
                   >
                     {link.name}
                     {link.dropdown && (
@@ -168,11 +276,6 @@ export default function Header() {
                         className={`h-4 w-4 transition-transform ${
                           activeDropdown === link.name ? 'rotate-180' : ''
                         }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setActiveDropdown(activeDropdown === link.name ? null : link.name);
-                        }}
                       />
                     )}
                   </Link>
@@ -181,14 +284,45 @@ export default function Header() {
                   {link.dropdown && activeDropdown === link.name && (
                     <div className="pl-4 py-2 space-y-1 bg-gray-50 rounded-lg mt-1 mb-2">
                       {link.dropdown.map((item) => (
-                        <Link
-                          key={item.name}
-                          to={item.href}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-lg"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {item.name}
-                        </Link>
+                        <div key={item.name}>
+                          <Link
+                            to={item.href}
+                            className="flex justify-between items-center px-4 py-2 text-sm text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-lg"
+                            onClick={(e) => {
+                              if (item.subDropdown) {
+                                toggleMobileSubDropdown(e, item.name);
+                              } else {
+                                setMobileMenuOpen(false);
+                              }
+                            }}
+                          >
+                            {item.name}
+                            {item.subDropdown && (
+                              <FontAwesomeIcon
+                                icon={faChevronDown}
+                                className={`h-3 w-3 transition-transform ${
+                                  activeSubDropdown === item.name ? 'rotate-180' : ''
+                                }`}
+                              />
+                            )}
+                          </Link>
+
+                          {/* Mobile Sub-Dropdown */}
+                          {item.subDropdown && activeSubDropdown === item.name && (
+                            <div className="pl-4 py-1 space-y-1 bg-gray-100 rounded-lg mt-1 mb-1">
+                              {item.subDropdown.map((subItem) => (
+                                <Link
+                                  key={subItem.name}
+                                  to={subItem.href}
+                                  className="block px-4 py-2 text-xs text-gray-700 hover:text-indigo-600 hover:bg-gray-200 rounded-lg"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  {subItem.name}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   )}

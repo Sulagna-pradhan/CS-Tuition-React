@@ -54,14 +54,14 @@ export default function PDFResourcesPage() {
       description: "Browse our collection of 1000+ academic books and research papers",
       icon: faSearch,
       color: "bg-purple-600 hover:bg-purple-500",
-      href: "/library"
+      href: "/comingsoon"
     },
     {
       title: "PDF Tools",
       description: "Merge, split, compress PDFs and other useful utilities",
       icon: faTools,
       color: "bg-teal-600 hover:bg-teal-500",
-      href: "/tools/pdf"
+      href: "/comingsoon"
     }
   ]
 
