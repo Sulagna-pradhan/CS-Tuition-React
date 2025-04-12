@@ -61,7 +61,7 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="pt-24 pb-20 min-h-screen w-full bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden">
+    <section className="pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-20 min-h-screen w-full bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden">
       {/* Parallax circles */}
       <div className="absolute inset-0 overflow-hidden z-0">
         <div className="absolute -top-20 -right-20 w-96 h-96 bg-blue-900 rounded-full opacity-20 blur-3xl parallax" data-speed="2"></div>
@@ -72,7 +72,7 @@ export default function HeroSection() {
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10 h-full flex flex-col justify-center">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-6rem)]">
-          <div className="pt-10 lg:pt-0">
+          <div className="pt-4 sm:pt-6 md:pt-8 lg:pt-0">
             <motion.div {...fadeIn} className="mb-6">
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-900 text-indigo-200">
                 <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-indigo-400"></span>
