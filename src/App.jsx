@@ -20,6 +20,8 @@ import PYQ from "./pages/pdf/PYQ";
 import ComingSoon from "./pages/ComingSoon";
 import Resources from "./pages/Resources";
 import InfoPage from "./pages/InfoPage";
+import Updates from "./pages/Updates";
+import FeedBack from "./pages/FeedBack";
 
 
 import Register from "./pages/auth/Register";
@@ -51,6 +53,8 @@ function App() {
           <Route index path="comingsoon" element={<ComingSoon />} />
           <Route index path="resources" element={<Resources />} />
           <Route index path="infopage" element={<InfoPage />} />
+          <Route index path="updates" element={<Updates />} />
+          <Route index path="feedback" element={<FeedBack />} />
 
           <Route index path="/auth/register" element={<Register />} />
           <Route index path="/auth/login" element={<Login />} />

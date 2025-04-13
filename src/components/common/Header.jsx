@@ -231,10 +231,10 @@ export default function Header() {
               </Link>
 
               {/* Notification Bell */}
-              <button className="ml-3 relative p-2 text-gray-500 hover:text-indigo-600 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
-                <FontAwesomeIcon icon={faBell} className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-              </button>
+              <Link to="/updates" className="ml-3 relative p-2 text-gray-500 hover:text-indigo-600 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
+               <FontAwesomeIcon icon={faBell} className="h-5 w-5" />
+                 <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+              </Link>
             </div>
           </nav>
 
