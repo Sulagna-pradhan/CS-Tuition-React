@@ -53,10 +53,10 @@ export default function FeedbackPage() {
                 Your feedback has been received. We appreciate you helping us improve.
               </p>
               <a
-                href="/dashboard"
+                href="/"
                 className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
               >
-                Return to Dashboard
+                Return to Home
               </a>
             </div>
           </div>
@@ -90,11 +90,11 @@ export default function FeedbackPage() {
         >
           <div className="p-8">
             <a 
-              href="/dashboard" 
+              href="/" 
               className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-8"
             >
               <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
-              Back to Dashboard
+              Back to Home
             </a>
 
             <form onSubmit={handleSubmit} className="space-y-6">
