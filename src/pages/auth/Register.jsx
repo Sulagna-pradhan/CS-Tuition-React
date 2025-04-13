@@ -612,7 +612,7 @@ export default function RegistrationForm() {
                   />
                   <label htmlFor="terms-agree" className="ml-2 block text-sm text-gray-700">
                     I agree to the{' '}
-                    <a href="#" className="text-indigo-600 hover:text-indigo-800">
+                    <a href="./termscondition" className="text-indigo-600 hover:text-indigo-800">
                       Terms and Conditions
                     </a>{' '}
                     and{' '}
