@@ -8,12 +8,15 @@ import {
   faSearch,
   faTools,
   faCheckCircle,
-  faArrowRight
+  faArrowRight,
+  faExclamationTriangle,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function PDFResourcesPage() {
   const [isVisible, setIsVisible] = useState(false)
+  const [showPopup, setShowPopup] = useState(true)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -68,8 +71,62 @@ export default function PDFResourcesPage() {
   return (
     <main
       id="pdf-resources-page"
-      className="min-h-screen pt-28 pb-16 bg-gradient-to-br from-[#f0f4f8] via-[#e2e8f0] to-[#cbd5e1] text-gray-900"
+      className="min-h-screen pt-28 pb-16 bg-gradient-to-br from-[#f0f4f8] via-[#e2e8f0] to-[#cbd5e1] text-gray-900 relative"
     >
+      {/* Popup Notice */}
+      <AnimatePresence>
+        {showPopup && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          >
+            <div 
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm"
+              onClick={() => setShowPopup(false)}
+            ></div>
+            <motion.div 
+              className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 relative z-10"
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                    <FontAwesomeIcon icon={faExclamationTriangle} className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">Important Notice</h3>
+                </div>
+                <button 
+                  onClick={() => setShowPopup(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+                </button>
+              </div>
+              
+              <div className="border-l-4 border-amber-500 pl-4 py-1 mb-6">
+                <p className="text-gray-700 leading-relaxed">
+                We are currently providing PDF resources — including exam syllabus and previous year question papers — for <span className="font-semibold">only undergraduate students of the Department of Computer Science, Calcutta University</span>. However, you can still explore our Digital Library & PDF Tools for more study materials.
+                </p>
+              </div>
+              
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-medium transition-colors flex items-center space-x-2"
+                >
+                  <span>Got it</span>
+                  <FontAwesomeIcon icon={faCheckCircle} className="h-4 w-4" />
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
       <div className="container mx-auto px-4">
         {/* Page Heading */}
         <div className="text-center mb-16">
