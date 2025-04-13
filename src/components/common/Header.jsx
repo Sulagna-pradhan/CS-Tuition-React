@@ -225,7 +225,7 @@ export default function Header() {
 
             {/* Divider and CTA Button */}
             <div className="ml-4 pl-4 border-l border-gray-200 flex items-center">
-              <Link to="/login" className="group flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">
+              <Link to="./auth/register" className="group flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">
                 <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
                 <span>Register</span>
               </Link>

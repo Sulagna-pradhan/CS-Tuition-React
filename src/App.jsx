@@ -22,6 +22,9 @@ import Resources from "./pages/Resources";
 import InfoPage from "./pages/InfoPage";
 
 
+import Register from "./pages/auth/Register";
+
+
 function App() {
 
   return (
@@ -45,6 +48,8 @@ function App() {
           <Route index path="comingsoon" element={<ComingSoon />} />
           <Route index path="resources" element={<Resources />} />
           <Route index path="infopage" element={<InfoPage />} />
+
+          <Route index path="/auth/register" element={<Register />} />
 
 
 
