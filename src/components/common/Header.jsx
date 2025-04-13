@@ -331,12 +331,12 @@ export default function Header() {
             </nav>
             <div className="px-4 pt-3">
               <Link
-                to="/login"
+                to="./auth/register"
                 className="flex items-center justify-center space-x-2 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 text-white px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 w-full shadow-md"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
-                <span>Login</span>
+                <span>Register</span>
               </Link>
             </div>
           </div>
