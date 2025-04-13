@@ -307,7 +307,7 @@ export default function RegistrationForm() {
             <div className="pt-4 text-center">
               <p className="text-gray-600">
                 Already have an account?{' '}
-                <a href="/login" className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline transition-colors">
+                <a href="./login" className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline transition-colors">
                   Login here
                 </a>
               </p>
@@ -645,7 +645,7 @@ export default function RegistrationForm() {
             </p>
             <div className="pt-4">
               <a
-                href="/login"
+                href="./login"
                 className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Login to Your Account

@@ -23,6 +23,8 @@ import InfoPage from "./pages/InfoPage";
 
 
 import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 
 function App() {
@@ -50,6 +52,8 @@ function App() {
           <Route index path="infopage" element={<InfoPage />} />
 
           <Route index path="/auth/register" element={<Register />} />
+          <Route index path="/auth/login" element={<Login />} />
+          <Route index path="/auth/forgotpassword" element={<ForgotPassword />} />
 
 
 
