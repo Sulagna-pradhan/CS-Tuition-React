@@ -10,13 +10,16 @@ import {
   faCheckCircle,
   faArrowRight,
   faExclamationTriangle,
-  faTimes
+  faTimes,
+  faClock
 } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function PDFResourcesPage() {
   const [isVisible, setIsVisible] = useState(false)
   const [showPopup, setShowPopup] = useState(true)
+  const [canClosePopup, setCanClosePopup] = useState(false)
+  const [countdown, setCountdown] = useState(6)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -36,6 +39,31 @@ export default function PDFResourcesPage() {
       if (section) observer.unobserve(section)
     }
   }, [])
+
+  // Countdown timer and popup closing logic
+  useEffect(() => {
+    if (!showPopup) return
+    
+    let timer = null
+    
+    if (countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1)
+      }, 1000)
+    } else {
+      setCanClosePopup(true)
+    }
+    
+    return () => {
+      if (timer) clearTimeout(timer)
+    }
+  }, [countdown, showPopup])
+
+  const handleClosePopup = () => {
+    if (canClosePopup) {
+      setShowPopup(false)
+    }
+  }
 
   const resources = [
     {
@@ -85,7 +113,7 @@ export default function PDFResourcesPage() {
           >
             <div 
               className="fixed inset-0 bg-black/40 backdrop-blur-sm"
-              onClick={() => setShowPopup(false)}
+              onClick={handleClosePopup}
             ></div>
             <motion.div 
               className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 relative z-10"
@@ -100,8 +128,9 @@ export default function PDFResourcesPage() {
                   <h3 className="text-xl font-bold text-gray-900">Important Notice</h3>
                 </div>
                 <button 
-                  onClick={() => setShowPopup(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  onClick={handleClosePopup}
+                  className={`text-gray-400 ${canClosePopup ? 'hover:text-gray-600' : 'cursor-not-allowed opacity-50'} transition-colors`}
+                  disabled={!canClosePopup}
                 >
                   <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
                 </button>
@@ -113,10 +142,24 @@ export default function PDFResourcesPage() {
                 </p>
               </div>
               
-              <div className="flex justify-end">
+              <div className="flex justify-between items-center">
+                {!canClosePopup ? (
+                  <div className="flex items-center space-x-2 text-gray-500">
+                    <FontAwesomeIcon icon={faClock} className="h-4 w-4" />
+                    <span>You can close in {countdown} seconds</span>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+                
                 <button
-                  onClick={() => setShowPopup(false)}
-                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-medium transition-colors flex items-center space-x-2"
+                  onClick={handleClosePopup}
+                  className={`px-5 py-2 bg-indigo-600 text-white rounded-lg font-medium transition-colors flex items-center space-x-2 ${
+                    canClosePopup 
+                      ? 'hover:bg-indigo-500' 
+                      : 'opacity-50 cursor-not-allowed'
+                  }`}
+                  disabled={!canClosePopup}
                 >
                   <span>Got it</span>
                   <FontAwesomeIcon icon={faCheckCircle} className="h-4 w-4" />
