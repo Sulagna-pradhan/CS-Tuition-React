@@ -669,6 +669,16 @@ export default function RegistrationForm() {
               )}
               <div>
                 <a
+                  href="/auth/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline transition-colors"
+                >
+                  Login
+                </a>
+              </div>
+              <div>
+                <a
                   href="https://mail.google.com"
                   target="_blank"
                   rel="noopener noreferrer"
