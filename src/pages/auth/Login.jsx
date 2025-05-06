@@ -75,11 +75,11 @@ export default function LoginForm() {
         console.log("User logged in:", user.uid);
 
         if (!user.emailVerified) {
-          throw new Error("Please verify your email before logging in.");
+          throw new Error("auth/email-not-verified");
         }
 
         console.log("Redirecting to /auth/dashboard");
-        window.location.href = "/auth/dashboard";
+        window.location.href = "/user/dashboard";
       } catch (error) {
         console.error("Login error:", {
           code: error.code,
@@ -88,13 +88,11 @@ export default function LoginForm() {
         let errorMessage = "Failed to sign in. Please try again.";
         if (error.code === "auth/user-not-found") {
           errorMessage = "No account found with this email.";
-        } else if (error.code === "auth/wrong-password") {
+        } else if (error.code === "auth/invalid-credential") {
           errorMessage = "Incorrect password.";
-        } else if (error.code === "auth/invalid-email") {
+        } else if (error.code === "auth/invalid-credential") {
           errorMessage = "Invalid email address.";
-        } else if (
-          error.message === "Please verify your email before logging in."
-        ) {
+        } else if (error.code === "auth/email-not-verified") {
           errorMessage = "Please verify your email before logging in.";
         }
         setLoginError(errorMessage);

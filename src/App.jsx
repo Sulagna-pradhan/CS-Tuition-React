@@ -26,7 +26,7 @@ import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import TermsCondition from "./pages/auth/TermsCondition";
 
-import Dashboard from "./pages/auth/Dashboard";
+import Dashboard from "./pages/user/Dashboard";
 
 function App() {
   return (
@@ -58,7 +58,7 @@ function App() {
         <Route index path="/auth/forgotpassword" element={<ForgotPassword />} />
         <Route index path="/auth/termscondition" element={<TermsCondition />} />
 
-        <Route index path="/auth/dashboard" element={<Dashboard />} />
+        <Route index path="/user/dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
   );

@@ -7,10 +7,10 @@ export default function Dashboard() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
         console.log("No user authenticated, redirecting to login");
-        window.location.href = "/login";
+        window.location.href = "/auth/login";
       } else if (!user.emailVerified) {
         console.log("Email not verified, redirecting to login");
-        window.location.href = "/login";
+        window.location.href = "/auth/login";
       } else {
         console.log("User authenticated and verified:", user.uid);
       }
@@ -38,7 +38,7 @@ export default function Dashboard() {
           </p>
           <button
             onClick={() =>
-              auth.signOut().then(() => (window.location.href = "/login"))
+              auth.signOut().then(() => (window.location.href = "/auth/login"))
             }
             className="mt-6 inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
           >
@@ -46,7 +46,7 @@ export default function Dashboard() {
           </button>
           <div className="mt-4 text-center">
             <a
-              href="/login"
+              href="/auth/login"
               className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline"
             >
               Back to Login
