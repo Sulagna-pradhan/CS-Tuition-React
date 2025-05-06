@@ -136,14 +136,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           Home
         </Link>
 
-        {/* My Posts */}
+        {/* Payment Status */}
         <Link
-          to="posts"
+          to="payment"
           className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
           onClick={handleLinkClick}
         >
           <FontAwesomeIcon icon={faBook} className="mr-3 text-indigo-500" />
-          My Posts
+          Payment Status
         </Link>
 
         {/* Profile */}

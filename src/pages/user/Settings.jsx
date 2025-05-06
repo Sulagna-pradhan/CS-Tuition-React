@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
@@ -6,6 +6,15 @@ import {
   faExclamationTriangle,
   faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  onAuthStateChanged,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  deleteUser,
+  updatePassword,
+} from "firebase/auth";
+import { doc, deleteDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase/Config";
 
 const SettingsPage = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -13,24 +22,109 @@ const SettingsPage = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [deletePassword, setDeletePassword] = useState("");
 
-  const handleDeleteAccount = () => {
-    // logic to delete the account
-    alert("Your account has been deleted.");
-    setShowDeleteConfirmation(false);
+  // Check authentication status
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User authenticated:", user.uid);
+      } else {
+        console.log("No user authenticated, redirecting to login");
+        window.location.href = "/auth/login";
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const reauthenticate = async (password) => {
+    try {
+      const user = auth.currentUser;
+      const credential = EmailAuthProvider.credential(user.email, password);
+      await reauthenticateWithCredential(user, credential);
+      console.log("Re-authentication successful");
+      return true;
+    } catch (error) {
+      console.error("Re-authentication error:", {
+        code: error.code,
+        message: error.message,
+      });
+      alert("Incorrect current password. Please try again.");
+      return false;
+    }
   };
 
-  const handleResetPassword = () => {
+  const handleDeleteAccount = async () => {
+    if (!deletePassword.trim()) {
+      alert("Please enter your current password to delete your account.");
+      return;
+    }
+
+    const isReauthenticated = await reauthenticate(deletePassword);
+    if (!isReauthenticated) return;
+
+    try {
+      const user = auth.currentUser;
+      const userDocRef = doc(db, "users", user.uid);
+      await deleteDoc(userDocRef);
+      console.log("User document deleted from Firestore");
+      await deleteUser(user);
+      console.log("User account deleted from Firebase Auth");
+      alert("Your account has been deleted successfully.");
+      setShowDeleteConfirmation(false);
+      setDeletePassword("");
+      window.location.href = "/auth/login";
+    } catch (error) {
+      console.error("Error deleting account:", {
+        code: error.code,
+        message: error.message,
+      });
+      alert("Failed to delete account. Please try again.");
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!currentPassword.trim()) {
+      alert("Please enter your current password.");
+      return;
+    }
+    if (!newPassword.trim() || !confirmPassword.trim()) {
+      alert("Please enter and confirm your new password.");
+      return;
+    }
     if (newPassword !== confirmPassword) {
       alert("New password and confirm password do not match.");
       return;
     }
-    // logic to reset the password
-    alert("Your password has been reset successfully.");
-    setShowResetPassword(false);
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+    if (newPassword.length < 6) {
+      alert("New password must be at least 6 characters long.");
+      return;
+    }
+
+    const isReauthenticated = await reauthenticate(currentPassword);
+    if (!isReauthenticated) return;
+
+    try {
+      const user = auth.currentUser;
+      await updatePassword(user, newPassword);
+      console.log("Password updated successfully");
+      alert("Your password has been reset successfully.");
+      setShowResetPassword(false);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error("Error resetting password:", {
+        code: error.code,
+        message: error.message,
+      });
+      if (error.code === "auth/weak-password") {
+        alert("New password is too weak. Please choose a stronger password.");
+      } else {
+        alert("Failed to reset password. Please try again.");
+      }
+    }
   };
 
   return (
@@ -74,13 +168,23 @@ const SettingsPage = () => {
                 />
                 Confirm Account Deletion
               </h3>
-              <p className="text-gray-500 mb-6">
+              <p className="text-gray-500 mb-4">
                 Are you sure you want to delete your account? This action cannot
-                be undone.
+                be undone. Please enter your current password to confirm.
               </p>
-              <div className="flex justify-end space-x-4">
+              <input
+                type="password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                placeholder="Current Password"
+              />
+              <div className="flex justify-end space-x-4 mt-6">
                 <button
-                  onClick={() => setShowDeleteConfirmation(false)}
+                  onClick={() => {
+                    setShowDeleteConfirmation(false);
+                    setDeletePassword("");
+                  }}
                   className="px-6 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                 >
                   Cancel
@@ -153,7 +257,12 @@ const SettingsPage = () => {
               </div>
               <div className="flex justify-end space-x-4 mt-6">
                 <button
-                  onClick={() => setShowResetPassword(false)}
+                  onClick={() => {
+                    setShowResetPassword(false);
+                    setCurrentPassword("");
+                    setNewPassword("");
+                    setConfirmPassword("");
+                  }}
                   className="px-6 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                 >
                   Cancel
