@@ -72,7 +72,7 @@ const DashboardHome = () => {
           </p>
           <div className="flex mt-4 space-x-3">
             <button className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-              Create Story
+              <a href="/user/profile">See Profile</a>
             </button>
             <button className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
               View Analytics

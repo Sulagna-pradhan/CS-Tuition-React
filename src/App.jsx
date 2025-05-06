@@ -36,6 +36,7 @@ import TermsCondition from "./pages/auth/TermsCondition";
 // Protected Dashboard Routes
 import DbHome from "./pages/user/DbHome";
 import Profile from "./pages/user/Profile";
+import Settings from "./pages/user/Settings";
 import DbLoader from "./components/dashboard/DbLoader";
 
 // Protected Route Component
@@ -106,6 +107,7 @@ function App() {
         <Route index element={<DbHome />} />
         <Route path="dbhome" element={<DbHome />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
   );

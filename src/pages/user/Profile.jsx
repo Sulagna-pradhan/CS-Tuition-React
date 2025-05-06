@@ -1,26 +1,97 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faSave,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase/Config";
 
 const DashboardProfile = () => {
-  const [username, setUsername] = useState("JohnDoe");
-  const [bio, setBio] = useState("A passionate storyteller and adventurer.");
-  const [phoneNumber, setPhoneNumber] = useState("+1234567890");
+  const [userData, setUserData] = useState({
+    name: "User",
+    email: "user@example.com",
+    bio: "Not Provided",
+    collegeName: "Not Provided",
+    contactNumber: "Not Provided",
+    createdAt: "Not Provided",
+    currentSemester: "Not Provided",
+    parentName: "Not Provided",
+    parentPhone: "Not Provided",
+    universityName: "Not Provided",
+  });
   const [avatar, setAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(
-    "https://via.placeholder.com/150"
+    "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?ga=GA1.1.1014516846.1736798059&semt=ais_hybrid&w=740"
   );
   const [isEditing, setIsEditing] = useState(false);
   const [issue, setIssue] = useState("");
 
-  const handleSaveProfile = () => {
+  // Fetch user data from Firestore
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("User authenticated:", user.uid);
+        try {
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setUserData({
+              name: data.name || "User",
+              email: data.email || "user@example.com",
+              bio: data.bio || "Not Provided",
+              collegeName: data.collegeName || "Not Provided",
+              contactNumber: data.contactNumber || "Not Provided",
+              createdAt: data.createdAt || "Not Provided",
+              currentSemester: data.currentSemester || "Not Provided",
+              parentName: data.parentName || "Not Provided",
+              parentPhone: data.parentPhone || "Not Provided",
+              universityName: data.universityName || "Not Provided",
+            });
+            console.log("User data fetched:", data);
+          } else {
+            console.log("No user document found in Firestore");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", {
+            code: error.code,
+            message: error.message,
+          });
+        }
+      } else {
+        console.log("No user authenticated, redirecting to login");
+        window.location.href = "/auth/login";
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleSaveProfile = async () => {
     setIsEditing(false);
-    // Here you can add logic to save the updated profile to your backend
-    console.log("Profile saved:", { username, bio, phoneNumber, avatar });
+    try {
+      const userDocRef = doc(db, "users", auth.currentUser.uid);
+      await updateDoc(userDocRef, {
+        bio: userData.bio,
+        collegeName: userData.collegeName,
+        contactNumber: userData.contactNumber,
+        createdAt: userData.createdAt,
+        currentSemester: userData.currentSemester,
+        parentName: userData.parentName,
+        universityName: userData.universityName,
+      });
+      console.log("Profile updated in Firestore:", userData);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", {
+        code: error.code,
+        message: error.message,
+      });
+      alert("Failed to update profile. Please try again.");
+    }
   };
 
   const handleAvatarChange = (e) => {
@@ -39,6 +110,10 @@ const DashboardProfile = () => {
     } else {
       alert("Please describe your issue before sending.");
     }
+  };
+
+  const handleInputChange = (field, value) => {
+    setUserData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -73,22 +148,156 @@ const DashboardProfile = () => {
             )}
           </div>
 
-          {/* Username Section */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Username</label>
-            {isEditing ? (
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
-                placeholder="Enter Username"
-              />
-            ) : (
+          {/* Personal Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Name (Read-Only) */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Name</label>
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {username}
+                {userData.name}
               </p>
-            )}
+            </div>
+
+            {/* Email (Read-Only) */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Email</label>
+              <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
+                {userData.email}
+              </p>
+            </div>
+
+            {/* Contact Number */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Contact Number
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={userData.contactNumber}
+                  onChange={(e) =>
+                    handleInputChange("contactNumber", e.target.value)
+                  }
+                  className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                  placeholder="Enter Contact Number"
+                />
+              ) : (
+                <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
+                  {userData.contactNumber}
+                </p>
+              )}
+            </div>
+
+            {/* Parent Name */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Parent Name
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={userData.parentName}
+                  onChange={(e) =>
+                    handleInputChange("parentName", e.target.value)
+                  }
+                  className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                  placeholder="Enter Parent Name"
+                />
+              ) : (
+                <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
+                  {userData.parentName}
+                </p>
+              )}
+            </div>
+
+            {/* Parent Phone (Read-Only) */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Parent Phone
+              </label>
+              <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
+                {userData.parentPhone}
+              </p>
+            </div>
+          </div>
+
+          {/* Academic Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* College Name */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                College Name
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={userData.collegeName}
+                  onChange={(e) =>
+                    handleInputChange("collegeName", e.target.value)
+                  }
+                  className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                  placeholder="Enter College Name"
+                />
+              ) : (
+                <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
+                  {userData.collegeName}
+                </p>
+              )}
+            </div>
+
+            {/* University Name */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                University Name
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={userData.universityName}
+                  onChange={(e) =>
+                    handleInputChange("universityName", e.target.value)
+                  }
+                  className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                  placeholder="Enter University Name"
+                />
+              ) : (
+                <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
+                  {userData.universityName}
+                </p>
+              )}
+            </div>
+
+            {/* Current Semester */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Current Semester
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={userData.currentSemester}
+                  onChange={(e) =>
+                    handleInputChange("currentSemester", e.target.value)
+                  }
+                  className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                  placeholder="Enter Current Semester"
+                />
+              ) : (
+                <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
+                  {userData.currentSemester}
+                </p>
+              )}
+            </div>
+
+            {/* Account Created At */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Account Created At
+              </label>
+              <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
+                {userData.createdAt}
+              </p>
+            </div>
           </div>
 
           {/* Bio Section */}
@@ -96,35 +305,15 @@ const DashboardProfile = () => {
             <label className="block text-sm font-medium mb-2">Bio</label>
             {isEditing ? (
               <textarea
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
+                value={userData.bio}
+                onChange={(e) => handleInputChange("bio", e.target.value)}
                 className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 rows="4"
                 placeholder="Enter Bio"
               />
             ) : (
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {bio}
-              </p>
-            )}
-          </div>
-
-          {/* Phone Number Section */}
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Phone Number
-            </label>
-            {isEditing ? (
-              <input
-                type="text"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
-                placeholder="Enter Phone Number"
-              />
-            ) : (
-              <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {phoneNumber}
+                {userData.bio}
               </p>
             )}
           </div>
