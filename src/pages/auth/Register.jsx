@@ -24,7 +24,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { auth } from "../../firebase/Config";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase/Config";
 
 export default function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -46,6 +47,7 @@ export default function RegistrationForm() {
   const [errors, setErrors] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [verificationError, setVerificationError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -130,14 +132,15 @@ export default function RegistrationForm() {
   };
 
   const handleSubmit = async () => {
-    console.log(
-      "handleSubmit called, showing success page without Firebase operations"
-    );
+    console.log("handleSubmit called, showing success page");
     setIsFormSubmitted(true);
   };
 
   const handleSendVerification = async () => {
     try {
+      setIsSubmitting(true);
+      setVerificationError("");
+
       console.log("handleSendVerification started with email:", formData.email);
       // Create user
       console.log("Attempting to create user...");
@@ -154,8 +157,7 @@ export default function RegistrationForm() {
       await sendEmailVerification(user);
       console.log("Verification email sent successfully");
 
-      // Optionally store user data in Firestore (commented out for now)
-      /*
+      // Store user data in Firestore
       console.log("Attempting to store user data in Firestore...");
       await setDoc(doc(db, "users", user.uid), {
         name: formData.name,
@@ -169,9 +171,11 @@ export default function RegistrationForm() {
         username: formData.username,
         bio: formData.bio,
         createdAt: new Date().toISOString(),
+        emailVerified: false,
+        uid: user.uid,
       });
+
       console.log("User data stored successfully");
-      */
     } catch (error) {
       console.error("Verification error:", {
         code: error.code,
@@ -187,6 +191,8 @@ export default function RegistrationForm() {
         errorMessage = "Password is too weak. Use at least 6 characters.";
       }
       setVerificationError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -640,16 +646,23 @@ export default function RegistrationForm() {
             </h2>
             <p className="text-gray-600">
               Thank you for registering with us,{" "}
-              <span className="font-medium">{formData.name}</span>. please
-              verify your email before login
+              <span className="font-medium">{formData.name}</span>. Please
+              verify your email before login.
             </p>
             <div className="pt-4 space-y-4">
               <button
                 onClick={handleSendVerification}
-                className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={isSubmitting}
+                className={`inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white ${
+                  isSubmitting
+                    ? "bg-indigo-400"
+                    : "bg-indigo-600 hover:bg-indigo-700"
+                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
               >
-                Send email to verify
-                <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
+                {isSubmitting ? "Sending..." : "Send email to verify"}
+                {!isSubmitting && (
+                  <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
+                )}
               </button>
               {verificationError && (
                 <p className="text-sm text-red-600">{verificationError}</p>
