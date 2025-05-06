@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router";
 import Header from "../../components/dashboard/DbHeader";
 import Sidebar from "../../components/dashboard/DbSidebar";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase/Config";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -10,6 +12,20 @@ const Dashboard = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+
+  // Check authentication status
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User authenticated:", user.uid);
+      } else {
+        console.log("No user authenticated, redirecting to login");
+        window.location.href = "/auth/login";
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div

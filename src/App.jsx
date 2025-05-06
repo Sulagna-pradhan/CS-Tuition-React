@@ -1,16 +1,17 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router";
 
+// Layouts
 import Base from "./pages/layouts/Base";
 import Dblayout from "./pages/layouts/Dblayout";
 
+// Publics Routes
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import Faq from "./pages/Faq";
 import WhyUs from "./pages/WhyUs";
 import Team from "./pages/Team";
-
 import Gallery from "./pages/Gallery";
 import Event from "./pages/Event";
 import Testimonial from "./pages/Testimonial";
@@ -24,11 +25,13 @@ import InfoPage from "./pages/InfoPage";
 import Updates from "./pages/Updates";
 import FeedBack from "./pages/FeedBack";
 
+// Authentication Routes
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import TermsCondition from "./pages/auth/TermsCondition";
 
+// Protected Dashboard Routes
 import Dashboard from "./pages/user/Dashboard";
 import DbHome from "./pages/user/DbHome";
 
