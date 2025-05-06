@@ -9,11 +9,11 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router";
-import { useAuth } from "../../context/AuthContext";
+//import { useAuth } from "../../context/AuthContext";
 
 const Header = ({ isSidebarOpen, toggleSidebar }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const { logout } = useAuth();
+  //const { logout } = useAuth();
 
   // Toggle user dropdown
   const toggleUserDropdown = () => {

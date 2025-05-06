@@ -1,6 +1,9 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router";
+
 import Base from "./pages/layouts/Base";
+import Dblayout from "./pages/layouts/Dblayout";
+
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
@@ -27,6 +30,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import TermsCondition from "./pages/auth/TermsCondition";
 
 import Dashboard from "./pages/user/Dashboard";
+import DbHome from "./pages/user/DbHome";
 
 function App() {
   return (
@@ -59,6 +63,10 @@ function App() {
         <Route index path="/auth/termscondition" element={<TermsCondition />} />
 
         <Route index path="/user/dashboard" element={<Dashboard />} />
+      </Route>
+
+      <Route path="" element={<Dblayout />}>
+        <Route index path="/user/dbHome" element={<DbHome />} />
       </Route>
     </Routes>
   );
