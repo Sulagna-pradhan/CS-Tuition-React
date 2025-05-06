@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase/Config";
 
 // Layouts
 import Base from "./pages/layouts/Base";
 import Dblayout from "./pages/layouts/Dblayout";
 
-// Publics Routes
+// Public Routes
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
@@ -32,44 +34,78 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import TermsCondition from "./pages/auth/TermsCondition";
 
 // Protected Dashboard Routes
-import Dashboard from "./pages/user/Dashboard";
 import DbHome from "./pages/user/DbHome";
+import Profile from "./pages/user/Profile";
+import DbLoader from "./components/dashboard/DbLoader";
+
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User authenticated:", user.uid);
+        setIsAuthenticated(true);
+      } else {
+        console.log("No user authenticated, redirecting to login");
+        setIsAuthenticated(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return <DbLoader />;
+  }
+
+  return isAuthenticated ? children : <Navigate to="/auth/login" replace />;
+};
 
 function App() {
   return (
     <Routes>
-      {/* public routes for all users */}
+      {/* Public routes under Base layout */}
+      <Route path="/" element={<Base />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<AboutUs />} />
+        <Route path="contact" element={<ContactUs />} />
+        <Route path="faq" element={<Faq />} />
+        <Route path="whyus" element={<WhyUs />} />
+        <Route path="team" element={<Team />} />
+        <Route path="gallery" element={<Gallery />} />
+        <Route path="event" element={<Event />} />
+        <Route path="testimonial" element={<Testimonial />} />
+        <Route path="features" element={<Features />} />
+        <Route path="pdf" element={<PDF />} />
+        <Route path="pdf/syllabus" element={<Syllabus />} />
+        <Route path="pdf/pyq" element={<PYQ />} />
+        <Route path="comingsoon" element={<ComingSoon />} />
+        <Route path="resources" element={<Resources />} />
+        <Route path="infopage" element={<InfoPage />} />
+        <Route path="updates" element={<Updates />} />
+        <Route path="feedback" element={<FeedBack />} />
 
-      <Route path="" element={<Base />}>
-        <Route index path="" element={<Home />} />
-        <Route index path="about" element={<AboutUs />} />
-        <Route index path="contact" element={<ContactUs />} />
-        <Route index path="faq" element={<Faq />} />
-        <Route index path="whyus" element={<WhyUs />} />
-        <Route index path="team" element={<Team />} />
-        <Route index path="gallery" element={<Gallery />} />
-        <Route index path="event" element={<Event />} />
-        <Route index path="testimonial" element={<Testimonial />} />
-        <Route index path="features" element={<Features />} />
-        <Route index path="pdf" element={<PDF />} />
-        <Route index path="/pdf/syllabus" element={<Syllabus />} />
-        <Route index path="/pdf/pyq" element={<PYQ />} />
-        <Route index path="comingsoon" element={<ComingSoon />} />
-        <Route index path="resources" element={<Resources />} />
-        <Route index path="infopage" element={<InfoPage />} />
-        <Route index path="updates" element={<Updates />} />
-        <Route index path="feedback" element={<FeedBack />} />
-
-        <Route index path="/auth/register" element={<Register />} />
-        <Route index path="/auth/login" element={<Login />} />
-        <Route index path="/auth/forgotpassword" element={<ForgotPassword />} />
-        <Route index path="/auth/termscondition" element={<TermsCondition />} />
-
-        <Route index path="/user/dashboard" element={<Dashboard />} />
+        {/* Authentication routes */}
+        <Route path="auth/register" element={<Register />} />
+        <Route path="auth/login" element={<Login />} />
+        <Route path="auth/forgotpassword" element={<ForgotPassword />} />
+        <Route path="auth/termscondition" element={<TermsCondition />} />
       </Route>
 
-      <Route path="" element={<Dblayout />}>
-        <Route index path="/user/dbHome" element={<DbHome />} />
+      {/* Protected dashboard routes under Dblayout */}
+      <Route
+        path="/user"
+        element={
+          <ProtectedRoute>
+            <Dblayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DbHome />} />
+        <Route path="dbhome" element={<DbHome />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>
   );
