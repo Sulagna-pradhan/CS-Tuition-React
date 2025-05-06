@@ -29,44 +29,58 @@ export default function Resources() {
 
   const tools = [
     {
-      title: "Productivity Tools",
+      title: "QR Code Generator",
       description:
-        "Access essential tools like QR codes, sticky notes, and to-do lists etc etc for better efficiency.",
+        "Create custom QR codes instantly for links, text, and more, with ease.",
       image:
         "https://bitlearning.vercel.app/assets/image/resources/productivity.webp",
-      href: "/tools/productivity",
+      href: "/tools/productivity/qrcode",
+      buttonText: "View Now",
     },
     {
-      title: "Academic Tools",
+      title: "To-Do List",
       description:
-        "Utilize tools like digital library, study planners, and more to enhance your learning experience.",
+        "Stay organized and on top of your tasks with a simple and efficient to-do list.",
       image:
         "https://bitlearning.vercel.app/assets/image/resources/academic.webp",
-      href: "/features/academic",
+      href: "/tools/productivity/todolist",
+      buttonText: "View Now",
     },
     {
-      title: "Dev Tools",
+      title: "Speech-to-Text Notetaker",
       description:
-        "Explore essential tools for web development to streamline your workflow and build dynamic websites.",
+        "Convert spoken words into text in real-time for faster note-taking during lectures.",
       image:
         "https://bitlearning.vercel.app/assets/image/resources/web%20development.webp",
       href: "/features/devtools",
+      buttonText: "View Now",
     },
     {
-      title: "Entertainment",
+      title: "Smart Calculator",
       description:
-        "Enjoy fun and engaging tools like music players, games, and media utilities for relaxation.",
+        "Perform advanced calculations with ease using a powerful and intuitive calculator.",
       image:
         "https://bitlearning.vercel.app/assets/image/resources/entertainment.avif",
       href: "/features/entertainment",
+      buttonText: "View Now",
     },
     {
-      title: "Extensions",
+      title: "Whiteboard & Drawing",
       description:
-        "Explore Our useful and innovative browser extensions that enhance your web experience.",
+        "Sketch ideas and solve problems with an interactive whiteboard and drawing tool.",
       image:
         "https://bitlearning.vercel.app/assets/image/resources/web_extensions.png",
       href: "/features/extensions",
+      buttonText: "View Now",
+    },
+    {
+      title: "Event Calendar",
+      description:
+        "Keep track of important events, deadlines, and activities with a dynamic event calendar.",
+      image:
+        "https://bitlearning.vercel.app/assets/image/resources/academic.webp",
+      href: "/features/calendar",
+      buttonText: "View Now",
     },
   ];
 
@@ -91,8 +105,8 @@ export default function Resources() {
           <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Cards Grid - Updated to show 4 cards per row on large screens */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {tools.map((tool, index) => (
             <motion.div
               key={tool.title}
@@ -129,7 +143,7 @@ export default function Resources() {
                       href={tool.href}
                       className="inline-flex items-center justify-center text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors"
                     >
-                      Explore tool
+                      {tool.buttonText}
                       <FontAwesomeIcon
                         icon={faArrowRight}
                         className="ml-2 h-3 w-3 transition-transform group-hover:translate-x-1"

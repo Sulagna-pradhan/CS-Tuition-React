@@ -28,6 +28,10 @@ import InfoPage from "./pages/InfoPage";
 import Updates from "./pages/Updates";
 import FeedBack from "./pages/FeedBack";
 
+import Productivity from "./pages/tools/Productivity";
+import QrCode from "./pages/tools/productivity/QrCode";
+import ToDoList from "./pages/tools/productivity/ToDoList";
+
 // Authentication Routes
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
@@ -90,6 +94,11 @@ function App() {
         <Route path="infopage" element={<InfoPage />} />
         <Route path="updates" element={<Updates />} />
         <Route path="feedback" element={<FeedBack />} />
+
+        {/* Productivity */}
+        <Route path="tools/productivity" element={<Productivity />} />
+        <Route path="tools/productivity/qrcode" element={<QrCode />} />
+        <Route path="tools/productivity/todolist" element={<ToDoList />} />
 
         {/* Authentication routes */}
         <Route path="auth/register" element={<Register />} />
