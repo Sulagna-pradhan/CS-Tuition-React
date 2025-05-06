@@ -75,7 +75,7 @@ const DashboardHome = () => {
               <a href="/user/profile">See Profile</a>
             </button>
             <button className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-              View Analytics
+              <a href="/user/settings">View Setting</a>
             </button>
           </div>
         </div>
