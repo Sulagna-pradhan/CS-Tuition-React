@@ -18,6 +18,7 @@ const DashboardHome = () => {
   const [userName, setUserName] = useState("User");
   const [collegeName, setCollegeName] = useState("Unknown College");
   const [universityName, setUniversityName] = useState("Unknown University");
+  const [currentSemester, setCurrentSemester] = useState("Unknown Semester");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -31,6 +32,7 @@ const DashboardHome = () => {
             setUserName(userData.name || "User");
             setCollegeName(userData.collegeName || "Unknown College");
             setUniversityName(userData.universityName || "Unknown University");
+            setCurrentSemester(userData.currentSemester || "Unknown Semester");
             console.log("User data fetched:", userData);
           } else {
             console.log("No user document found in Firestore");
@@ -84,10 +86,10 @@ const DashboardHome = () => {
         <div className="rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300 transform hover:scale-105 hover:shadow-xl">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white-500 text-sm font-medium">
+              <p className="text-white-500 text-medium font-medium">
                 You are a student of
               </p>
-              <h3 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
                 {collegeName}
               </h3>
             </div>
@@ -102,10 +104,10 @@ const DashboardHome = () => {
         <div className="rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300 transform hover:scale-105 hover:shadow-xl">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-gray-500 text-sm font-medium">
+              <p className="text-white-500 text-medium font-medium">
                 Your University
               </p>
-              <h3 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
                 {universityName}
               </h3>
             </div>
@@ -120,33 +122,14 @@ const DashboardHome = () => {
         <div className="rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300 transform hover:scale-105 hover:shadow-xl">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-gray-500 text-sm font-medium">Following</p>
-              <h3 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
-                350
+              <p className="text-white-500 text-medium font-medium">Semester</p>
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
+                {currentSemester}
               </h3>
             </div>
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
               <FontAwesomeIcon icon={faUser} className="text-blue-600" />
             </div>
-          </div>
-          <div className="mt-4 flex items-center text-xs font-medium text-green-500">
-            <svg
-              className="w-3 h-3 mr-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12 7a1 1 0 10-2 0v4a1 1 0 102 0V7z"
-                clipRule="evenodd"
-              />
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.938a1 1 0 00.293.707l1.16 1.16a1 1 0 101.414-1.414l-.292-.293V5z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span>Up by 5% from last month</span>
           </div>
         </div>
       </div>

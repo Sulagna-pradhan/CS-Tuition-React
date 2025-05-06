@@ -31,6 +31,7 @@ export default function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isVisible, setIsVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,8 +41,8 @@ export default function RegistrationForm() {
     contactNumber: "",
     parentName: "",
     parentPhone: "",
-    username: "",
     password: "",
+    confirmPassword: "",
     bio: "",
   });
   const [errors, setErrors] = useState({});
@@ -49,7 +50,13 @@ export default function RegistrationForm() {
   const [verificationError, setVerificationError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Load form data from sessionStorage on component mount
   useEffect(() => {
+    const savedFormData = sessionStorage.getItem("registrationFormData");
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -67,6 +74,11 @@ export default function RegistrationForm() {
       if (section) observer.unobserve(section);
     };
   }, []);
+
+  // Save form data to sessionStorage whenever it changes
+  useEffect(() => {
+    sessionStorage.setItem("registrationFormData", JSON.stringify(formData));
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -112,18 +124,31 @@ export default function RegistrationForm() {
         newErrors.parentPhone = "Parent phone is required";
       } else if (!/^\d{10}$/.test(formData.parentPhone)) {
         newErrors.parentPhone = "Enter a valid 10-digit phone number";
+      } else if (formData.contactNumber === formData.parentPhone) {
+        newErrors.parentPhone =
+          "Parent phone cannot be same as your contact number";
       }
     } else if (step === 4) {
-      if (!formData.username.trim()) {
-        newErrors.username = "Username is required";
-      } else if (formData.username.length < 4) {
-        newErrors.username = "Username must be at least 4 characters";
-      }
-
       if (!formData.password.trim()) {
         newErrors.password = "Password is required";
-      } else if (formData.password.length < 8) {
-        newErrors.password = "Password must be at least 8 characters";
+      } else if (
+        formData.password.length < 8 ||
+        formData.password.length > 16
+      ) {
+        newErrors.password = "Password must be 8-16 characters long";
+      } else if (
+        !/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,16}$/.test(
+          formData.password
+        )
+      ) {
+        newErrors.password =
+          "Password must contain letters, numbers, and at least 1 special character";
+      }
+
+      if (!formData.confirmPassword.trim()) {
+        newErrors.confirmPassword = "Please confirm your password";
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = "Passwords do not match";
       }
     }
 
@@ -134,6 +159,8 @@ export default function RegistrationForm() {
   const handleSubmit = async () => {
     console.log("handleSubmit called, showing success page");
     setIsFormSubmitted(true);
+    // Clear session storage after successful submission
+    sessionStorage.removeItem("registrationFormData");
   };
 
   const handleSendVerification = async () => {
@@ -157,7 +184,7 @@ export default function RegistrationForm() {
       await sendEmailVerification(user);
       console.log("Verification email sent successfully");
 
-      // Store user data in Firestore
+      // Store user data in Firestore (username field removed)
       console.log("Attempting to store user data in Firestore...");
       await setDoc(doc(db, "users", user.uid), {
         name: formData.name,
@@ -168,7 +195,6 @@ export default function RegistrationForm() {
         contactNumber: formData.contactNumber,
         parentName: formData.parentName,
         parentPhone: formData.parentPhone,
-        username: formData.username,
         bio: formData.bio,
         createdAt: new Date().toISOString(),
         emailVerified: false,
@@ -510,35 +536,6 @@ export default function RegistrationForm() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Username
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
-                    <FontAwesomeIcon icon={faIdCard} />
-                  </div>
-                  <input
-                    type="text"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    className={`w-full pl-10 pr-3 py-3 border ${
-                      errors.username ? "border-red-500" : "border-gray-300"
-                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
-                    placeholder="Choose a username"
-                  />
-                </div>
-                {errors.username && (
-                  <p className="mt-1 text-sm text-red-600">{errors.username}</p>
-                )}
-                {!errors.username && (
-                  <p className="mt-1 text-xs text-gray-500">
-                    Username must be at least 4 characters long
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Password
                 </label>
                 <div className="relative">
@@ -567,7 +564,44 @@ export default function RegistrationForm() {
                 )}
                 {!errors.password && (
                   <p className="mt-1 text-xs text-gray-500">
-                    Password must be at least 8 characters long
+                    Password must be 8-16 characters with letters, numbers, and
+                    1 special character
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                    <FontAwesomeIcon icon={faLock} />
+                  </div>
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className={`w-full pl-10 pr-10 py-3 border ${
+                      errors.confirmPassword
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                    placeholder="Confirm your password"
+                  />
+                  <div
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-500 hover:text-gray-700"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    <FontAwesomeIcon
+                      icon={showConfirmPassword ? faEyeSlash : faEye}
+                    />
+                  </div>
+                </div>
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.confirmPassword}
                   </p>
                 )}
               </div>
