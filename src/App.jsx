@@ -21,6 +21,7 @@ import Features from "./pages/Features";
 import PDF from "./pages/PDF";
 import Syllabus from "./pages/pdf/Syllabus";
 import PYQ from "./pages/pdf/PYQ";
+import Library from "./pages/pdf/Library";
 import ComingSoon from "./pages/ComingSoon";
 import Resources from "./pages/Resources";
 import InfoPage from "./pages/InfoPage";
@@ -83,6 +84,7 @@ function App() {
         <Route path="pdf" element={<PDF />} />
         <Route path="pdf/syllabus" element={<Syllabus />} />
         <Route path="pdf/pyq" element={<PYQ />} />
+        <Route path="pdf/library" element={<Library />} />
         <Route path="comingsoon" element={<ComingSoon />} />
         <Route path="resources" element={<Resources />} />
         <Route path="infopage" element={<InfoPage />} />

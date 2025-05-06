@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilePdf,
   faBookOpen,
@@ -11,90 +11,92 @@ import {
   faArrowRight,
   faExclamationTriangle,
   faTimes,
-  faClock
-} from '@fortawesome/free-solid-svg-icons'
-import { motion, AnimatePresence } from 'framer-motion'
+  faClock,
+} from "@fortawesome/free-solid-svg-icons";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function PDFResourcesPage() {
-  const [isVisible, setIsVisible] = useState(false)
-  const [showPopup, setShowPopup] = useState(true)
-  const [canClosePopup, setCanClosePopup] = useState(false)
-  const [countdown, setCountdown] = useState(6)
+  const [isVisible, setIsVisible] = useState(false);
+  const [showPopup, setShowPopup] = useState(true);
+  const [canClosePopup, setCanClosePopup] = useState(false);
+  const [countdown, setCountdown] = useState(6);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(entry.target)
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.2 }
-    )
+    );
 
-    const section = document.getElementById('pdf-resources-page')
-    if (section) observer.observe(section)
+    const section = document.getElementById("pdf-resources-page");
+    if (section) observer.observe(section);
 
     return () => {
-      if (section) observer.unobserve(section)
-    }
-  }, [])
+      if (section) observer.unobserve(section);
+    };
+  }, []);
 
   // Countdown timer and popup closing logic
   useEffect(() => {
-    if (!showPopup) return
-    
-    let timer = null
-    
+    if (!showPopup) return;
+
+    let timer = null;
+
     if (countdown > 0) {
       timer = setTimeout(() => {
-        setCountdown(countdown - 1)
-      }, 1000)
+        setCountdown(countdown - 1);
+      }, 1000);
     } else {
-      setCanClosePopup(true)
+      setCanClosePopup(true);
     }
-    
+
     return () => {
-      if (timer) clearTimeout(timer)
-    }
-  }, [countdown, showPopup])
+      if (timer) clearTimeout(timer);
+    };
+  }, [countdown, showPopup]);
 
   const handleClosePopup = () => {
     if (canClosePopup) {
-      setShowPopup(false)
+      setShowPopup(false);
     }
-  }
+  };
 
   const resources = [
     {
       title: "CU Exam Syllabus",
-      description: "Download complete syllabus for all courses with subject-wise breakdown",
+      description:
+        "Download complete syllabus for all courses with subject-wise breakdown",
       icon: faFilePdf,
       color: "bg-indigo-600 hover:bg-indigo-500",
-      href: "/pdf/syllabus"
+      href: "/pdf/syllabus",
     },
     {
       title: "CU Previous Year Questions",
       description: "Access previous 5 years question papers with solutions",
       icon: faBookOpen,
       color: "bg-blue-600 hover:bg-blue-500",
-      href: "/pdf/pyq"
+      href: "/pdf/pyq",
     },
     {
       title: "Digital Library",
-      description: "Browse our collection of 1000+ academic books and research papers",
+      description:
+        "Browse our collection of 1000+ academic books and research papers",
       icon: faSearch,
       color: "bg-purple-600 hover:bg-purple-500",
-      href: "/comingsoon"
+      href: "/pdf/library",
     },
     {
       title: "PDF Tools",
       description: "Merge, split, compress PDFs and other useful utilities",
       icon: faTools,
       color: "bg-teal-600 hover:bg-teal-500",
-      href: "/comingsoon"
-    }
-  ]
+      href: "/comingsoon",
+    },
+  ];
 
   return (
     <main
@@ -104,18 +106,18 @@ export default function PDFResourcesPage() {
       {/* Popup Notice */}
       <AnimatePresence>
         {showPopup && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-50 flex items-center justify-center px-4"
           >
-            <div 
+            <div
               className="fixed inset-0 bg-black/40 backdrop-blur-sm"
               onClick={handleClosePopup}
             ></div>
-            <motion.div 
+            <motion.div
               className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 relative z-10"
               initial={{ y: 20 }}
               animate={{ y: 0 }}
@@ -123,25 +125,41 @@ export default function PDFResourcesPage() {
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-                    <FontAwesomeIcon icon={faExclamationTriangle} className="h-5 w-5" />
+                    <FontAwesomeIcon
+                      icon={faExclamationTriangle}
+                      className="h-5 w-5"
+                    />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Important Notice</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Important Notice
+                  </h3>
                 </div>
-                <button 
+                <button
                   onClick={handleClosePopup}
-                  className={`text-gray-400 ${canClosePopup ? 'hover:text-gray-600' : 'cursor-not-allowed opacity-50'} transition-colors`}
+                  className={`text-gray-400 ${
+                    canClosePopup
+                      ? "hover:text-gray-600"
+                      : "cursor-not-allowed opacity-50"
+                  } transition-colors`}
                   disabled={!canClosePopup}
                 >
                   <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
                 </button>
               </div>
-              
+
               <div className="border-l-4 border-amber-500 pl-4 py-1 mb-6">
                 <p className="text-gray-700 leading-relaxed">
-                We are currently providing PDF resources — including exam syllabus and previous year question papers — for <span className="font-semibold">only undergraduate students of the Department of Computer Science, Calcutta University</span>. However, you can still explore our Digital Library & PDF Tools for more study materials.
+                  We are currently providing PDF resources — including exam
+                  syllabus and previous year question papers — for{" "}
+                  <span className="font-semibold">
+                    only undergraduate students of the Department of Computer
+                    Science, Calcutta University
+                  </span>
+                  . However, you can still explore our Digital Library & PDF
+                  Tools for more study materials.
                 </p>
               </div>
-              
+
               <div className="flex justify-between items-center">
                 {!canClosePopup ? (
                   <div className="flex items-center space-x-2 text-gray-500">
@@ -151,13 +169,13 @@ export default function PDFResourcesPage() {
                 ) : (
                   <div></div>
                 )}
-                
+
                 <button
                   onClick={handleClosePopup}
                   className={`px-5 py-2 bg-indigo-600 text-white rounded-lg font-medium transition-colors flex items-center space-x-2 ${
-                    canClosePopup 
-                      ? 'hover:bg-indigo-500' 
-                      : 'opacity-50 cursor-not-allowed'
+                    canClosePopup
+                      ? "hover:bg-indigo-500"
+                      : "opacity-50 cursor-not-allowed"
                   }`}
                   disabled={!canClosePopup}
                 >
@@ -169,7 +187,7 @@ export default function PDFResourcesPage() {
           </motion.div>
         )}
       </AnimatePresence>
-      
+
       <div className="container mx-auto px-4">
         {/* Page Heading */}
         <div className="text-center mb-16">
@@ -177,7 +195,9 @@ export default function PDFResourcesPage() {
             <FontAwesomeIcon icon={faCheckCircle} className="mr-2" />
             PDF Resources
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Academic Resources Center</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+            Academic Resources Center
+          </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
             Access all essential study materials in one convenient location.
           </p>
@@ -202,7 +222,9 @@ export default function PDFResourcesPage() {
                     <FontAwesomeIcon icon={resource.icon} className="h-7 w-7" />
                   </div>
                   <h3 className="text-xl font-semibold">{resource.title}</h3>
-                  <p className="text-white/90 text-sm">{resource.description}</p>
+                  <p className="text-white/90 text-sm">
+                    {resource.description}
+                  </p>
                   <div className="mt-auto flex items-center gap-2 text-sm font-medium">
                     <span>Explore now</span>
                     <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
@@ -222,10 +244,13 @@ export default function PDFResourcesPage() {
         >
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 text-indigo-800">
             <FontAwesomeIcon icon={faCheckCircle} className="mr-2" />
-            <span>New resources added weekly - Last updated: {new Date().toLocaleDateString()}</span>
+            <span>
+              New resources added weekly - Last updated:{" "}
+              {new Date().toLocaleDateString()}
+            </span>
           </div>
         </motion.div>
       </div>
     </main>
-  )
+  );
 }
