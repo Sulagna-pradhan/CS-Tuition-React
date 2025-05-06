@@ -1,73 +1,105 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelope,
   faLock,
   faArrowRight,
   faUserPlus,
   faKey,
-  faCircleExclamation
-} from '@fortawesome/free-solid-svg-icons';
-import { motion } from 'framer-motion';
+  faCircleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase/Config";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loginError, setLoginError] = useState('');
+  const [loginError, setLoginError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
-    
-    if (loginError) setLoginError('');
+
+    if (loginError) setLoginError("");
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
-    
+
     if (!formData.password.trim()) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       setIsSubmitting(true);
-      setLoginError('');
-      
-      // Simulate login API call
-      console.log('Login attempt with:', formData);
-      setTimeout(() => {
+      setLoginError("");
+
+      try {
+        console.log("Attempting login with:", formData.email);
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+        const user = userCredential.user;
+        console.log("User logged in:", user.uid);
+
+        if (!user.emailVerified) {
+          throw new Error("Please verify your email before logging in.");
+        }
+
+        console.log("Redirecting to /auth/dashboard");
+        window.location.href = "/auth/dashboard";
+      } catch (error) {
+        console.error("Login error:", {
+          code: error.code,
+          message: error.message,
+        });
+        let errorMessage = "Failed to sign in. Please try again.";
+        if (error.code === "auth/user-not-found") {
+          errorMessage = "No account found with this email.";
+        } else if (error.code === "auth/wrong-password") {
+          errorMessage = "Incorrect password.";
+        } else if (error.code === "auth/invalid-email") {
+          errorMessage = "Invalid email address.";
+        } else if (
+          error.message === "Please verify your email before logging in."
+        ) {
+          errorMessage = "Please verify your email before logging in.";
+        }
+        setLoginError(errorMessage);
         setIsSubmitting(false);
-        // setLoginError('Invalid email or password'); // Uncomment to simulate error
-      }, 1500);
+      }
     }
   };
 
@@ -80,7 +112,9 @@ export default function LoginForm() {
             <FontAwesomeIcon icon={faKey} className="mr-2" />
             Student Login
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Welcome Back</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+            Welcome Back
+          </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
             Sign in to access your academic resources and tools.
           </p>
@@ -88,7 +122,7 @@ export default function LoginForm() {
         </div>
 
         {/* Form Container */}
-        <motion.div 
+        <motion.div
           className="max-w-md mx-auto bg-white rounded-2xl shadow-xl overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,13 +130,16 @@ export default function LoginForm() {
         >
           <div className="p-8">
             {loginError && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-md"
               >
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faCircleExclamation} className="text-red-500 mr-3" />
+                  <FontAwesomeIcon
+                    icon={faCircleExclamation}
+                    className="text-red-500 mr-3"
+                  />
                   <p className="text-red-700 font-medium">{loginError}</p>
                 </div>
               </motion.div>
@@ -110,7 +147,9 @@ export default function LoginForm() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
                     <FontAwesomeIcon icon={faEnvelope} />
@@ -120,15 +159,21 @@ export default function LoginForm() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full pl-10 pr-3 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                    className={`w-full pl-10 pr-3 py-3 border ${
+                      errors.email ? "border-red-500" : "border-gray-300"
+                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
                     placeholder="Enter your email address"
                   />
                 </div>
-                {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Password
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
                     <FontAwesomeIcon icon={faLock} />
@@ -138,11 +183,15 @@ export default function LoginForm() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`w-full pl-10 pr-3 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+                    className={`w-full pl-10 pr-3 py-3 border ${
+                      errors.password ? "border-red-500" : "border-gray-300"
+                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
                     placeholder="Enter your password"
                   />
                 </div>
-                {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
@@ -153,13 +202,19 @@ export default function LoginForm() {
                     type="checkbox"
                     className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                  <label
+                    htmlFor="remember-me"
+                    className="ml-2 block text-sm text-gray-700"
+                  >
                     Remember me
                   </label>
                 </div>
 
                 <div className="text-sm">
-                  <a href="./forgotpassword" className="font-medium text-indigo-600 hover:text-indigo-500">
+                  <a
+                    href="./forgotpassword"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                  >
                     Forgot your password?
                   </a>
                 </div>
@@ -170,15 +225,18 @@ export default function LoginForm() {
                   type="submit"
                   disabled={isSubmitting}
                   className={`w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-                    isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
+                    isSubmitting ? "opacity-75 cursor-not-allowed" : ""
                   }`}
                 >
                   {isSubmitting ? (
-                    'Signing in...'
+                    "Signing in..."
                   ) : (
                     <>
                       Sign In
-                      <FontAwesomeIcon icon={faArrowRight} className="ml-2 h-4 w-4" />
+                      <FontAwesomeIcon
+                        icon={faArrowRight}
+                        className="ml-2 h-4 w-4"
+                      />
                     </>
                   )}
                 </button>
@@ -187,8 +245,11 @@ export default function LoginForm() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
-                Don't have an account?{' '}
-                <a href="./register" className="font-medium text-indigo-600 hover:text-indigo-500">
+                Don't have an account?{" "}
+                <a
+                  href="./register"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
                   <FontAwesomeIcon icon={faUserPlus} className="mr-1" />
                   Register here
                 </a>
