@@ -78,8 +78,8 @@ export default function LoginForm() {
           throw new Error("auth/email-not-verified");
         }
 
-        console.log("Redirecting to /auth/dashboard");
-        window.location.href = "/user/dashboard";
+        console.log("Redirecting to /user/dbhome");
+        window.location.href = "/user/dbhome";
       } catch (error) {
         console.error("Login error:", {
           code: error.code,
