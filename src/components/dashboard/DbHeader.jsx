@@ -9,11 +9,49 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router";
-//import { useAuth } from "../../context/AuthContext";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase/Config";
 
 const Header = ({ isSidebarOpen, toggleSidebar }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  //const { logout } = useAuth();
+  const [userName, setUserName] = useState("User");
+  const [userEmail, setUserEmail] = useState("user@example.com");
+
+  // Fetch user data from Firestore
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("User authenticated:", user.uid);
+        try {
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUserName(userData.name || "User");
+            setUserEmail(userData.email || "user@example.com");
+            console.log("User data fetched:", userData);
+          } else {
+            console.log("No user document found in Firestore");
+            setUserName("User");
+            setUserEmail("user@example.com");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", {
+            code: error.code,
+            message: error.message,
+          });
+          setUserName("User");
+          setUserEmail("user@example.com");
+        }
+      } else {
+        console.log("No user authenticated, redirecting to login");
+        window.location.href = "/auth/login";
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Toggle user dropdown
   const toggleUserDropdown = () => {
@@ -34,8 +72,18 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
     };
   }, [showUserDropdown]);
 
-  const handleLogout = () => {
-    logout();
+  // Logout function
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      console.log("User logged out successfully");
+      window.location.href = "/auth/login";
+    } catch (error) {
+      console.error("Logout error:", {
+        code: error.code,
+        message: error.message,
+      });
+    }
   };
 
   return (
@@ -85,7 +133,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
             >
               <div className="relative">
                 <img
-                  src="https://via.placeholder.com/40"
+                  src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?ga=GA1.1.1014516846.1736798059&semt=ais_hybrid&w=740"
                   alt="User Avatar"
                   className="w-10 h-10 rounded-full border-2 border-indigo-500 object-cover"
                 />
@@ -93,9 +141,9 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
               </div>
               <div className="hidden md:block">
                 <p className="font-medium dark:text-white text-gray-800">
-                  John Doe
+                  {userName}
                 </p>
-                <p className="text-xs text-gray-500">Admin</p>
+                <p className="text-xs text-gray-500">Student Profile</p>
               </div>
             </button>
 
@@ -104,10 +152,10 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
               <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-xl py-2 z-50 bg-white dark:bg-gray-800 border dark:border-gray-700">
                 <div className="px-4 py-3 border-b dark:border-gray-700 border-gray-100">
                   <p className="text-sm font-medium dark:text-white text-gray-800">
-                    John Doe
+                    {userName}
                   </p>
                   <p className="text-xs dark:text-gray-400 text-gray-500 truncate">
-                    john.doe@example.com
+                    {userEmail}
                   </p>
                 </div>
                 <Link

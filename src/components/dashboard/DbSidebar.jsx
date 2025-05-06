@@ -9,10 +9,50 @@ import {
   faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase/Config";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
+  const [userName, setUserName] = useState("User");
+  const [contactNumber, setContactNumber] = useState("Unknown Number");
+
+  // Fetch user data from Firestore
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("User authenticated:", user.uid);
+        try {
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUserName(userData.name || "User");
+            setContactNumber(userData.contactNumber || "Unknown Number");
+            console.log("User data fetched:", userData);
+          } else {
+            console.log("No user document found in Firestore");
+            setUserName("User");
+            setContactNumber("Unknown Number");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", {
+            code: error.code,
+            message: error.message,
+          });
+          setUserName("User");
+          setContactNumber("Unknown Number");
+        }
+      } else {
+        console.log("No user authenticated, redirecting to login");
+        window.location.href = "/auth/login";
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Handle clicks outside the sidebar
   useEffect(() => {
@@ -42,6 +82,20 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     }
   };
 
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      console.log("User logged out successfully");
+      window.location.href = "/auth/login";
+    } catch (error) {
+      console.error("Logout error:", {
+        code: error.code,
+        message: error.message,
+      });
+    }
+  };
+
   return (
     <aside
       ref={sidebarRef}
@@ -61,14 +115,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
       {/* User Info */}
       <div className="flex flex-col items-center mb-8 mt-2">
         <img
-          src="https://via.placeholder.com/80"
+          src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?ga=GA1.1.1014516846.1736798059&semt=ais_hybrid&w=740"
           alt="User Avatar"
           className="w-20 h-20 rounded-full border-4 border-indigo-500 mb-4 object-cover"
         />
         <h3 className="font-bold text-xl dark:text-white text-gray-800">
-          John Doe
+          {userName}
         </h3>
-        <p className="text-gray-500 text-sm">Premium User</p>
+        <p className="text-gray-500 text-sm">{contactNumber}</p>
       </div>
 
       {/* Sidebar Links */}
@@ -125,7 +179,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         <div className="pt-6 mt-6 border-t border-gray-200">
           <button
             className="w-full text-left flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
-            onClick={handleLinkClick}
+            onClick={() => {
+              handleLinkClick();
+              handleLogout();
+            }}
           >
             <FontAwesomeIcon
               icon={faSignOutAlt}
