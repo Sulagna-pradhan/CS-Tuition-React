@@ -32,8 +32,7 @@ export default function Resources() {
       title: "QR Code Generator",
       description:
         "Create custom QR codes instantly for links, text, and more, with ease.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/productivity.webp",
+      image: "/productivity/qr code.png",
       href: "/tools/productivity/qrcode",
       buttonText: "View Now",
     },
@@ -41,8 +40,7 @@ export default function Resources() {
       title: "To-Do List",
       description:
         "Stay organized and on top of your tasks with a simple and efficient to-do list.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/academic.webp",
+      image: "/productivity/todolist.jpeg",
       href: "/tools/productivity/todolist",
       buttonText: "View Now",
     },
@@ -50,35 +48,15 @@ export default function Resources() {
       title: "Speech-to-Text Notetaker",
       description:
         "Convert spoken words into text in real-time for faster note-taking during lectures.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/web%20development.webp",
+      image: "/productivity/speechtotext.webp",
       href: "/features/devtools",
-      buttonText: "View Now",
-    },
-    {
-      title: "Smart Calculator",
-      description:
-        "Perform advanced calculations with ease using a powerful and intuitive calculator.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/entertainment.avif",
-      href: "/features/entertainment",
-      buttonText: "View Now",
-    },
-    {
-      title: "Whiteboard & Drawing",
-      description:
-        "Sketch ideas and solve problems with an interactive whiteboard and drawing tool.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/web_extensions.png",
-      href: "/features/extensions",
       buttonText: "View Now",
     },
     {
       title: "Event Calendar",
       description:
         "Keep track of important events, deadlines, and activities with a dynamic event calendar.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/academic.webp",
+      image: "/productivity/event calender.jpeg",
       href: "/features/calendar",
       buttonText: "View Now",
     },

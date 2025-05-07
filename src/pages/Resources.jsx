@@ -32,40 +32,35 @@ export default function Resources() {
       title: "Productivity Tools",
       description:
         "Access essential tools like QR codes, sticky notes, and to-do lists etc etc for better efficiency.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/productivity.webp",
+      image: "productivity.webp",
       href: "/tools/productivity",
     },
     {
       title: "Academic Tools",
       description:
         "Utilize tools like digital library, study planners, and more to enhance your learning experience.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/academic.webp",
+      image: "academic.webp",
       href: "/features/academic",
     },
     {
       title: "Dev Tools",
       description:
         "Explore essential tools for web development to streamline your workflow and build dynamic websites.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/web%20development.webp",
+      image: "web%20development.webp",
       href: "/features/devtools",
     },
     {
       title: "Entertainment",
       description:
         "Enjoy fun and engaging tools like music players, games, and media utilities for relaxation.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/entertainment.avif",
+      image: "entertainment.avif",
       href: "/features/entertainment",
     },
     {
       title: "Extensions",
       description:
         "Explore Our useful and innovative browser extensions that enhance your web experience.",
-      image:
-        "https://bitlearning.vercel.app/assets/image/resources/web_extensions.png",
+      image: "web_extensions.png",
       href: "/features/extensions",
     },
   ];
