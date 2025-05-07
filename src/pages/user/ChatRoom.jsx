@@ -211,8 +211,8 @@ const ChatRoom = () => {
             Connect with others in real-time.
           </p>
           <p className="text-yellow-500 text-sm sm:text-base">
-            we are not storing any data, as you refresh your page or get out
-            from room all data will be erased
+            We do not store any data. If you refresh the page or leave the room,
+            all data will be erased.
           </p>
         </div>
 
@@ -258,7 +258,7 @@ const ChatRoom = () => {
                 {/* Online Users */}
                 <div>
                   <p className="text-sm font-medium">
-                    Online Users: {onlineUsers.length}
+                    Active Users: {onlineUsers.length}
                   </p>
                   <p className="text-sm text-gray-500 truncate">
                     {onlineUsers.join(", ")}
