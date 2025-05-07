@@ -12,7 +12,6 @@ function Base() {
         <Outlet />
       </main>
       <Footer />
-      <Toaster position="top-right" reverseOrder={false} />
     </>
   );
 }

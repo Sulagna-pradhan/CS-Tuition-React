@@ -26,6 +26,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase/Config";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -167,6 +168,7 @@ export default function RegistrationForm() {
     try {
       setIsSubmitting(true);
       setVerificationError("");
+      toast.loading("Sending verification email...");
 
       console.log("handleSendVerification started with email:", formData.email);
       // Create user
@@ -183,6 +185,10 @@ export default function RegistrationForm() {
       console.log("Sending verification email...");
       await sendEmailVerification(user);
       console.log("Verification email sent successfully");
+      toast.dismiss();
+      toast.success(
+        "Verification email sent successfully! Please check your Gmail account."
+      );
 
       // Store user data in Firestore (username field removed)
       console.log("Attempting to store user data in Firestore...");
@@ -208,6 +214,7 @@ export default function RegistrationForm() {
         message: error.message,
         stack: error.stack,
       });
+      toast.dismiss();
       let errorMessage = "Failed to send verification email. Please try again.";
       if (error.code === "auth/email-already-in-use") {
         errorMessage = "This email is already registered.";
@@ -217,6 +224,7 @@ export default function RegistrationForm() {
         errorMessage = "Password is too weak. Use at least 6 characters.";
       }
       setVerificationError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -667,6 +675,7 @@ export default function RegistrationForm() {
     console.log("Rendering success page for user:", formData.name);
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#f0f4f8] via-[#e2e8f0] to-[#cbd5e1] pt-28 pb-16 px-4">
+        <Toaster position="top-center" reverseOrder={false} />
         <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center space-y-6">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
