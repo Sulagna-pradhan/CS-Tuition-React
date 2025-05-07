@@ -210,6 +210,10 @@ const ChatRoom = () => {
           <p className="text-gray-500 text-sm sm:text-base">
             Connect with others in real-time.
           </p>
+          <p className="text-yellow-500 text-sm sm:text-base">
+            we are not storing any data, as you refresh your page or get out
+            from room all data will be erased
+          </p>
         </div>
 
         {/* Name Input */}

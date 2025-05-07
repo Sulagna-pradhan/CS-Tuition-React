@@ -8,6 +8,7 @@ import {
   faTimes,
   faBookmark,
   faVideo,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
@@ -153,7 +154,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
           onClick={handleLinkClick}
         >
-          <FontAwesomeIcon icon={faVideo} className="mr-3 text-indigo-500" />
+          <FontAwesomeIcon icon={faComment} className="mr-3 text-indigo-500" />
           Lets Chat
         </Link>
 
