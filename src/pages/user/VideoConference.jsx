@@ -9,27 +9,13 @@ import {
   faComment,
   faSignInAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { onAuthStateChanged } from "firebase/auth";
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  orderBy,
-  onSnapshot,
-  getDoc,
-  doc,
-} from "firebase/firestore";
-import { auth, db } from "../../firebase/Config";
+// Import Peer from peerjs
 import Peer from "peerjs";
 
 const VideoConference = () => {
   const [roomId, setRoomId] = useState("");
   const [joined, setJoined] = useState(false);
-  const [userId, setUserId] = useState(null);
-  const [userName, setUserName] = useState("");
   const [peers, setPeers] = useState({});
-  const [streams, setStreams] = useState({});
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
@@ -39,75 +25,74 @@ const VideoConference = () => {
   const peerInstance = useRef(null);
   const localStreamRef = useRef(null);
   const messagesEndRef = useRef(null);
-
-  // Fetch user data and initialize PeerJS
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log("User authenticated:", user.uid);
-        setUserId(user.uid);
-        // Fetch user name from Firestore
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const { firstName, lastName } = userDoc.data();
-          setUserName(`${firstName} ${lastName}`);
-        } else {
-          console.log("User document not found");
-          window.location.href = "/auth/login";
-        }
-      } else {
-        console.log("No user authenticated, redirecting to login");
-        window.location.href = "/auth/login";
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const connectionsRef = useRef({});
 
   // Initialize PeerJS and media stream
   useEffect(() => {
-    if (!userId) return;
-
-    const peer = new Peer(userId, {
-      host: "0.peerjs.com",
-      port: 443,
-      path: "/",
+    const peer = new Peer({
+      host: "peerjs-server.herokuapp.com",
       secure: true,
+      path: "/",
     });
+
     peerInstance.current = peer;
 
     peer.on("open", (id) => {
-      console.log("PeerJS ID:", id);
+      console.log("My peer ID:", id);
     });
 
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        localStreamRef.current = stream;
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-          localVideoRef.current.play();
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to get media stream:", err);
-      });
+    peer.on("error", (err) => {
+      console.error("Peer error:", err);
+    });
 
+    return () => {
+      peer.destroy();
+    };
+  }, []);
+
+  // Initialize local media stream
+  const initLocalStream = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      localStreamRef.current = stream;
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error("Failed to get local stream", err);
+    }
+  };
+
+  // Join room
+  const joinRoom = async () => {
+    if (!roomId) {
+      alert("Please enter a Room ID");
+      return;
+    }
+
+    await initLocalStream();
+    setJoined(true);
+
+    const peer = peerInstance.current;
+
+    // Handle incoming calls
     peer.on("call", (call) => {
       call.answer(localStreamRef.current);
+
       call.on("stream", (remoteStream) => {
-        setStreams((prev) => ({ ...prev, [call.peer]: remoteStream }));
         setPeers((prev) => ({
           ...prev,
-          [call.peer]: { call, name: prev[call.peer]?.name || "Unknown" },
+          [call.peer]: {
+            stream: remoteStream,
+            name: `User ${call.peer.slice(0, 5)}`,
+          },
         }));
       });
+
       call.on("close", () => {
-        setStreams((prev) => {
-          const newStreams = { ...prev };
-          delete newStreams[call.peer];
-          return newStreams;
-        });
         setPeers((prev) => {
           const newPeers = { ...prev };
           delete newPeers[call.peer];
@@ -116,208 +101,178 @@ const VideoConference = () => {
       });
     });
 
-    peer.on("connection", (conn) => {
-      conn.on("data", async (data) => {
-        if (data.type === "name") {
-          setPeers((prev) => ({
-            ...prev,
-            [conn.peer]: { ...prev[conn.peer], name: data.name },
-          }));
-        } else if (data.type === "chat") {
-          setMessages((prev) => [
-            ...prev,
-            {
-              uid: conn.peer,
-              message: data.message,
-              timestamp: new Date().toISOString(),
-            },
-          ]);
-        }
-      });
-      conn.on("open", () => {
-        conn.send({ type: "name", name: userName });
-      });
-    });
+    // Connect to the room (peer ID = room ID)
+    const call = peer.call(roomId, localStreamRef.current);
 
-    return () => {
-      peer.destroy();
-      if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, [userId, userName]);
-
-  // Join room
-  const joinRoom = async () => {
-    if (!roomId) {
-      alert("Please enter a Room ID");
-      return;
-    }
-    setJoined(true);
-
-    // Fetch existing peers in the room (simulated via Firestore or signaling)
-    const q = query(collection(db, "chat"), where("roomId", "==", roomId));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const roomPeers = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.uid !== userId && !peers[data.uid]) {
-          roomPeers.push(data.uid);
-        }
-      });
-
-      roomPeers.forEach((peerId) => {
-        const call = peerInstance.current.call(peerId, localStreamRef.current);
-        call.on("stream", (remoteStream) => {
-          setStreams((prev) => ({ ...prev, [peerId]: remoteStream }));
-        });
-        call.on("close", () => {
-          setStreams((prev) => {
-            const newStreams = { ...prev };
-            delete newStreams[peerId];
-            return newStreams;
-          });
-        });
-
-        const conn = peerInstance.current.connect(peerId);
-        conn.on("open", () => {
-          conn.send({ type: "name", name: userName });
-        });
-        conn.on("data", (data) => {
-          if (data.type === "name") {
-            setPeers((prev) => ({
-              ...prev,
-              [peerId]: { call, name: data.name },
-            }));
-          } else if (data.type === "chat") {
-            setMessages((prev) => [
-              ...prev,
-              {
-                uid: peerId,
-                message: data.message,
-                timestamp: new Date().toISOString(),
-              },
-            ]);
-          }
-        });
-
-        setPeers((prev) => ({
-          ...prev,
-          [peerId]: { call, name: "Unknown" },
-        }));
-      });
-    });
-
-    // Fetch chat history
-    const chatQuery = query(
-      collection(db, "chat"),
-      where("roomId", "==", roomId),
-      orderBy("timestamp", "asc")
-    );
-    onSnapshot(chatQuery, (snapshot) => {
-      const chatMessages = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
+    call.on("stream", (remoteStream) => {
+      setPeers((prev) => ({
+        ...prev,
+        [roomId]: {
+          stream: remoteStream,
+          name: "Host",
+        },
       }));
-      setMessages(chatMessages);
     });
 
-    return () => unsubscribe();
+    call.on("close", () => {
+      setPeers((prev) => {
+        const newPeers = { ...prev };
+        delete newPeers[roomId];
+        return newPeers;
+      });
+    });
+
+    // Data connection for chat
+    const conn = peer.connect(roomId);
+    connectionsRef.current[roomId] = conn;
+
+    conn.on("data", (data) => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          uid: roomId,
+          message: data,
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+    });
+  };
+
+  // Leave room
+  const leaveRoom = () => {
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((track) => track.stop());
+    }
+
+    Object.values(connectionsRef.current).forEach((conn) => conn.close());
+    connectionsRef.current = {};
+
+    setPeers({});
+    setJoined(false);
   };
 
   // Toggle video
   const toggleVideo = () => {
     if (localStreamRef.current) {
       const videoTrack = localStreamRef.current.getVideoTracks()[0];
-      videoTrack.enabled = !videoTrack.enabled;
-      setVideoEnabled(videoTrack.enabled);
+      if (videoTrack) {
+        videoTrack.enabled = !videoTrack.enabled;
+        setVideoEnabled(videoTrack.enabled);
+      }
     }
   };
 
-  // Toggle audio
+  // Toggle audio with speech detection
   const toggleAudio = () => {
     if (localStreamRef.current) {
       const audioTrack = localStreamRef.current.getAudioTracks()[0];
-      audioTrack.enabled = !audioTrack.enabled;
-      setAudioEnabled(audioTrack.enabled);
+      if (audioTrack) {
+        audioTrack.enabled = !audioTrack.enabled;
+        setAudioEnabled(audioTrack.enabled);
+
+        // Auto-unmute when speaking (simplified version)
+        if (audioTrack.enabled) {
+          const audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+          const analyser = audioContext.createAnalyser();
+          const microphone = audioContext.createMediaStreamSource(
+            localStreamRef.current
+          );
+          microphone.connect(analyser);
+
+          const checkSpeaking = () => {
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+            analyser.getByteFrequencyData(dataArray);
+            const sum = dataArray.reduce((a, b) => a + b, 0);
+
+            if (sum > 1000 && !audioTrack.enabled) {
+              // Threshold for speech detection
+              audioTrack.enabled = true;
+              setAudioEnabled(true);
+            } else {
+              requestAnimationFrame(checkSpeaking);
+            }
+          };
+
+          checkSpeaking();
+        }
+      }
     }
   };
 
   // Share screen
   const shareScreen = async () => {
-    if (isScreenSharing) {
-      // Stop screen sharing
-      localStreamRef.current.getTracks().forEach((track) => track.stop());
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      localStreamRef.current = stream;
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-        localVideoRef.current.play();
-      }
-      setIsScreenSharing(false);
-      setVideoEnabled(true);
-      // Update all peers
-      Object.values(peers).forEach(({ call }) => {
-        const sender = call.peerConnection
-          .getSenders()
-          .find((s) => s.track.kind === "video");
-        sender.replaceTrack(stream.getVideoTracks()[0]);
-      });
-    } else {
-      // Start screen sharing
-      try {
+    try {
+      if (isScreenSharing) {
+        // Stop screen sharing
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        replaceStream(stream);
+        setIsScreenSharing(false);
+      } else {
+        // Start screen sharing
         const stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
         });
-        localStreamRef.current.getTracks().forEach((track) => track.stop());
-        localStreamRef.current = stream;
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-          localVideoRef.current.play();
-        }
+        replaceStream(stream);
         setIsScreenSharing(true);
-        setVideoEnabled(true);
-        // Update all peers
-        Object.values(peers).forEach(({ call }) => {
-          const sender = call.peerConnection
-            .getSenders()
-            .find((s) => s.track.kind === "video");
-          sender.replaceTrack(stream.getVideoTracks()[0]);
-        });
-        // Stop screen sharing when user stops
-        stream.getVideoTracks()[0].onended = () => shareScreen();
-      } catch (err) {
-        console.error("Failed to share screen:", err);
+
+        // Handle when user stops sharing
+        stream.getVideoTracks()[0].onended = () => {
+          shareScreen();
+        };
       }
+    } catch (err) {
+      console.error("Screen sharing error:", err);
     }
   };
 
+  // Replace local stream and update peers
+  const replaceStream = (newStream) => {
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((track) => track.stop());
+    }
+
+    localStreamRef.current = newStream;
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = newStream;
+    }
+
+    // Update all peers with new stream
+    Object.keys(connectionsRef.current).forEach((peerId) => {
+      const call = peerInstance.current.call(peerId, newStream);
+      call.on("stream", (remoteStream) => {
+        setPeers((prev) => ({
+          ...prev,
+          [peerId]: {
+            ...prev[peerId],
+            stream: remoteStream,
+          },
+        }));
+      });
+    });
+  };
+
   // Send chat message
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (!newMessage.trim()) return;
 
     const messageData = {
-      roomId,
-      uid: userId,
+      uid: peerInstance.current.id,
       message: newMessage,
       timestamp: new Date().toISOString(),
     };
 
-    try {
-      await addDoc(collection(db, "chat"), messageData);
-      Object.keys(peers).forEach((peerId) => {
-        const conn = peerInstance.current.connect(peerId);
-        conn.on("open", () => {
-          conn.send({ type: "chat", message: newMessage });
-        });
-      });
-      setNewMessage("");
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
+    setMessages((prev) => [...prev, messageData]);
+
+    // Send to all connected peers
+    Object.values(connectionsRef.current).forEach((conn) => {
+      conn.send(newMessage);
+    });
+
+    setNewMessage("");
   };
 
   // Scroll to latest message
@@ -383,21 +338,21 @@ const VideoConference = () => {
                     className="w-full h-64 object-cover rounded-lg border dark:border-gray-600"
                   />
                   <p className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
-                    {userName} (You)
+                    You
                   </p>
                 </div>
                 {/* Remote Videos */}
-                {Object.entries(streams).map(([peerId, stream]) => (
+                {Object.entries(peers).map(([peerId, peerData]) => (
                   <div key={peerId} className="relative">
                     <video
                       autoPlay
                       className="w-full h-64 object-cover rounded-lg border dark:border-gray-600"
                       ref={(video) => {
-                        if (video) video.srcObject = stream;
+                        if (video) video.srcObject = peerData.stream;
                       }}
                     />
                     <p className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
-                      {peers[peerId]?.name || "Unknown"}
+                      {peerData.name}
                     </p>
                   </div>
                 ))}
@@ -434,10 +389,20 @@ const VideoConference = () => {
                 </button>
                 <button
                   onClick={shareScreen}
-                  className="px-6 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className={`px-6 py-2 text-white text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+                    isScreenSharing
+                      ? "bg-red-600 hover:bg-red-700"
+                      : "bg-indigo-600 hover:bg-indigo-700"
+                  }`}
                 >
                   <FontAwesomeIcon icon={faDesktop} className="mr-2" />
                   {isScreenSharing ? "Stop Sharing" : "Share Screen"}
+                </button>
+                <button
+                  onClick={leaveRoom}
+                  className="px-6 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                >
+                  Leave Room
                 </button>
               </div>
             </div>
@@ -455,18 +420,20 @@ const VideoConference = () => {
                   <div
                     key={index}
                     className={`mb-2 ${
-                      msg.uid === userId ? "text-right" : "text-left"
+                      msg.uid === peerInstance.current?.id
+                        ? "text-right"
+                        : "text-left"
                     }`}
                   >
                     <p className="text-sm text-gray-500">
-                      {msg.uid === userId
+                      {msg.uid === peerInstance.current?.id
                         ? "You"
                         : peers[msg.uid]?.name || "Unknown"}{" "}
                       - {new Date(msg.timestamp).toLocaleTimeString()}
                     </p>
                     <p
                       className={`inline-block px-3 py-1 rounded-lg ${
-                        msg.uid === userId
+                        msg.uid === peerInstance.current?.id
                           ? "bg-indigo-600 text-white"
                           : "bg-gray-200 dark:bg-gray-600 dark:text-white"
                       }`}
