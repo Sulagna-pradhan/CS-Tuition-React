@@ -43,6 +43,7 @@ import DbHome from "./pages/user/DbHome";
 import Profile from "./pages/user/Profile";
 import Settings from "./pages/user/Settings";
 import Payment from "./pages/user/Payment";
+import VideoConference from "./pages/user/VideoConference";
 import DbLoader from "./components/dashboard/DbLoader";
 
 // Protected Route Component
@@ -121,6 +122,7 @@ function App() {
         <Route path="profile" element={<Profile />} />
         <Route path="settings" element={<Settings />} />
         <Route path="payment" element={<Payment />} />
+        <Route path="videoconference" element={<VideoConference />} />
       </Route>
     </Routes>
   );
