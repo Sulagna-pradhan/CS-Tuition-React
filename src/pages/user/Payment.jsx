@@ -293,10 +293,16 @@ const PaymentStatus = () => {
             <FontAwesomeIcon icon={faQrcode} className="mr-2 text-indigo-600" />
             Pay Now
           </h3>
-          <p className="text-gray-500 mb-4">
-            First scan this QR code and make payment. Then type amount &
-            transaction ID.
+          <p className="text-yellow-500 text-xl mb-4">
+            First{" "}
+            <span className="text-green-500 font-semibold">
+              scan this QR code
+            </span>{" "}
+            and make payment. Then type amount &amp;
+            <span className="text-blue-500 font-semibold"> transaction ID</span>
+            .
           </p>
+
           <div className="flex flex-col md:flex-row md:space-x-6">
             <div className="mb-4 md:mb-0">
               <img
