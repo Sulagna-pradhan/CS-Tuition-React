@@ -75,7 +75,7 @@ export default function Resources() {
             Tools & Resources
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-            Explore Our Useful Tools
+            Explore Our Productivity Tools
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
             Carefully curated tools to boost your productivity and learning

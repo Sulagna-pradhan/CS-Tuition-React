@@ -29,6 +29,7 @@ import Updates from "./pages/Updates";
 import FeedBack from "./pages/FeedBack";
 
 import Productivity from "./pages/tools/Productivity";
+import Learning from "./pages/tools/Learning";
 import QrCode from "./pages/tools/productivity/QrCode";
 import ToDoList from "./pages/tools/productivity/ToDoList";
 
@@ -101,6 +102,9 @@ function App() {
         <Route path="tools/productivity" element={<Productivity />} />
         <Route path="tools/productivity/qrcode" element={<QrCode />} />
         <Route path="tools/productivity/todolist" element={<ToDoList />} />
+
+        {/* Productivity */}
+        <Route path="tools/learning" element={<Learning />} />
 
         {/* Authentication routes */}
         <Route path="auth/register" element={<Register />} />

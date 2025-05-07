@@ -29,39 +29,13 @@ export default function Resources() {
 
   const tools = [
     {
-      title: "Productivity Tools",
+      title: "Online Code Editor",
       description:
-        "Access essential tools like QR codes, sticky notes, and to-do lists etc etc for better efficiency.",
-      image: "productivity.webp",
-      href: "/tools/productivity",
-    },
-    {
-      title: "Academic Tools",
-      description:
-        "Utilize tools like digital library, study planners, and more to enhance your learning experience.",
-      image: "academic.webp",
-      href: "/tools/learning",
-    },
-    {
-      title: "Dev Tools",
-      description:
-        "Explore essential tools for web development to streamline your workflow and build dynamic websites.",
-      image: "web%20development.webp",
-      href: "/features/devtools",
-    },
-    {
-      title: "Entertainment",
-      description:
-        "Enjoy fun and engaging tools like music players, games, and media utilities for relaxation.",
-      image: "entertainment.avif",
-      href: "/features/entertainment",
-    },
-    {
-      title: "Extensions",
-      description:
-        "Explore Our useful and innovative browser extensions that enhance your web experience.",
-      image: "web_extensions.png",
-      href: "/features/extensions",
+        "Write, compile, and run code instantly in multiple programming languages.",
+      image:
+        "https://cdn.pixabay.com/photo/2018/02/27/17/40/programming-3186084_640.png",
+      href: "/tools/productivity/qrcode",
+      buttonText: "View Now",
     },
   ];
 
@@ -78,7 +52,7 @@ export default function Resources() {
             Tools & Resources
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-            Explore Our Useful Tools
+            Explore Our Learning Tools
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
             Carefully curated tools to boost your productivity and learning
@@ -86,8 +60,8 @@ export default function Resources() {
           <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Cards Grid - Updated to show 4 cards per row on large screens */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {tools.map((tool, index) => (
             <motion.div
               key={tool.title}
@@ -124,7 +98,7 @@ export default function Resources() {
                       href={tool.href}
                       className="inline-flex items-center justify-center text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors"
                     >
-                      Explore tool
+                      {tool.buttonText}
                       <FontAwesomeIcon
                         icon={faArrowRight}
                         className="ml-2 h-3 w-3 transition-transform group-hover:translate-x-1"
