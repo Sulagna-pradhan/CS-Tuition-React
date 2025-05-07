@@ -44,6 +44,7 @@ import Profile from "./pages/user/Profile";
 import Settings from "./pages/user/Settings";
 import Payment from "./pages/user/Payment";
 import VideoConference from "./pages/user/VideoConference";
+import ChatRoom from "./pages/user/ChatRoom";
 import DbLoader from "./components/dashboard/DbLoader";
 
 // Protected Route Component
@@ -123,6 +124,7 @@ function App() {
         <Route path="settings" element={<Settings />} />
         <Route path="payment" element={<Payment />} />
         <Route path="videoconference" element={<VideoConference />} />
+        <Route path="chatroom" element={<ChatRoom />} />
       </Route>
     </Routes>
   );

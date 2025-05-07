@@ -147,6 +147,16 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           Payment Status
         </Link>
 
+        {/* Lets Chat */}
+        <Link
+          to="chatroom"
+          className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
+          onClick={handleLinkClick}
+        >
+          <FontAwesomeIcon icon={faVideo} className="mr-3 text-indigo-500" />
+          Lets Chat
+        </Link>
+
         {/* Video Conference */}
         <Link
           to="videoconference"
@@ -165,16 +175,6 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         >
           <FontAwesomeIcon icon={faUser} className="mr-3 text-indigo-500" />
           Profile
-        </Link>
-
-        {/* My Bookmarks */}
-        <Link
-          to="bookmarks"
-          className="flex items-center py-3 px-4 rounded-lg dark:text-white hover:dark:bg-gray-700 text-gray-700 hover:bg-indigo-50 transition-colors duration-200 font-medium"
-          onClick={handleLinkClick}
-        >
-          <FontAwesomeIcon icon={faBookmark} className="mr-3 text-indigo-500" />
-          My Bookmarks
         </Link>
 
         {/* Settings */}

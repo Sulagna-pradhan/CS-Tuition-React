@@ -9,7 +9,6 @@ import {
   faComment,
   faSignInAlt,
 } from "@fortawesome/free-solid-svg-icons";
-// Import Peer from peerjs
 import Peer from "peerjs";
 
 const VideoConference = () => {
@@ -24,17 +23,17 @@ const VideoConference = () => {
   const localVideoRef = useRef(null);
   const peerInstance = useRef(null);
   const localStreamRef = useRef(null);
-  const messagesEndRef = useRef(null);
   const connectionsRef = useRef({});
+  const messagesEndRef = useRef(null);
 
-  // Initialize PeerJS and media stream
+  // Initialize PeerJS
   useEffect(() => {
     const peer = new Peer({
-      host: "peerjs-server.herokuapp.com",
-      secure: true,
+      host: "0.peerjs.com",
+      port: 443,
       path: "/",
+      secure: true,
     });
-
     peerInstance.current = peer;
 
     peer.on("open", (id) => {
@@ -47,6 +46,9 @@ const VideoConference = () => {
 
     return () => {
       peer.destroy();
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
     };
   }, []);
 
@@ -60,16 +62,20 @@ const VideoConference = () => {
       localStreamRef.current = stream;
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
+        localVideoRef.current.play().catch((err) => {
+          console.error("Failed to play local video:", err);
+        });
       }
     } catch (err) {
-      console.error("Failed to get local stream", err);
+      console.error("Failed to get local stream:", err);
+      alert("Failed to access camera or microphone. Please check permissions.");
     }
   };
 
   // Join room
   const joinRoom = async () => {
     if (!roomId) {
-      alert("Please enter a Room ID");
+      alert("Please enter a Room ID.");
       return;
     }
 
@@ -81,17 +87,15 @@ const VideoConference = () => {
     // Handle incoming calls
     peer.on("call", (call) => {
       call.answer(localStreamRef.current);
-
       call.on("stream", (remoteStream) => {
         setPeers((prev) => ({
           ...prev,
           [call.peer]: {
             stream: remoteStream,
-            name: `User ${call.peer.slice(0, 5)}`,
+            call,
           },
         }));
       });
-
       call.on("close", () => {
         setPeers((prev) => {
           const newPeers = { ...prev };
@@ -101,31 +105,27 @@ const VideoConference = () => {
       });
     });
 
-    // Connect to the room (peer ID = room ID)
-    const call = peer.call(roomId, localStreamRef.current);
-
-    call.on("stream", (remoteStream) => {
-      setPeers((prev) => ({
-        ...prev,
-        [roomId]: {
-          stream: remoteStream,
-          name: "Host",
-        },
-      }));
-    });
-
-    call.on("close", () => {
-      setPeers((prev) => {
-        const newPeers = { ...prev };
-        delete newPeers[roomId];
-        return newPeers;
+    // Handle data connections for chat
+    peer.on("connection", (conn) => {
+      connectionsRef.current[conn.peer] = conn;
+      conn.on("data", (data) => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            uid: conn.peer,
+            message: data,
+            timestamp: new Date().toISOString(),
+          },
+        ]);
+      });
+      conn.on("close", () => {
+        delete connectionsRef.current[conn.peer];
       });
     });
 
-    // Data connection for chat
+    // Connect to room peer
     const conn = peer.connect(roomId);
     connectionsRef.current[roomId] = conn;
-
     conn.on("data", (data) => {
       setMessages((prev) => [
         ...prev,
@@ -136,6 +136,24 @@ const VideoConference = () => {
         },
       ]);
     });
+
+    const call = peer.call(roomId, localStreamRef.current);
+    call.on("stream", (remoteStream) => {
+      setPeers((prev) => ({
+        ...prev,
+        [roomId]: {
+          stream: remoteStream,
+          call,
+        },
+      }));
+    });
+    call.on("close", () => {
+      setPeers((prev) => {
+        const newPeers = { ...prev };
+        delete newPeers[roomId];
+        return newPeers;
+      });
+    });
   };
 
   // Leave room
@@ -143,12 +161,16 @@ const VideoConference = () => {
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach((track) => track.stop());
     }
-
     Object.values(connectionsRef.current).forEach((conn) => conn.close());
+    Object.values(peers).forEach(({ call }) => call?.close());
     connectionsRef.current = {};
-
     setPeers({});
+    setMessages([]);
     setJoined(false);
+    setRoomId("");
+    setVideoEnabled(true);
+    setAudioEnabled(true);
+    setIsScreenSharing(false);
   };
 
   // Toggle video
@@ -162,40 +184,13 @@ const VideoConference = () => {
     }
   };
 
-  // Toggle audio with speech detection
+  // Toggle audio
   const toggleAudio = () => {
     if (localStreamRef.current) {
       const audioTrack = localStreamRef.current.getAudioTracks()[0];
       if (audioTrack) {
         audioTrack.enabled = !audioTrack.enabled;
         setAudioEnabled(audioTrack.enabled);
-
-        // Auto-unmute when speaking (simplified version)
-        if (audioTrack.enabled) {
-          const audioContext = new (window.AudioContext ||
-            window.webkitAudioContext)();
-          const analyser = audioContext.createAnalyser();
-          const microphone = audioContext.createMediaStreamSource(
-            localStreamRef.current
-          );
-          microphone.connect(analyser);
-
-          const checkSpeaking = () => {
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            analyser.getByteFrequencyData(dataArray);
-            const sum = dataArray.reduce((a, b) => a + b, 0);
-
-            if (sum > 1000 && !audioTrack.enabled) {
-              // Threshold for speech detection
-              audioTrack.enabled = true;
-              setAudioEnabled(true);
-            } else {
-              requestAnimationFrame(checkSpeaking);
-            }
-          };
-
-          checkSpeaking();
-        }
       }
     }
   };
@@ -209,50 +204,56 @@ const VideoConference = () => {
           video: true,
           audio: true,
         });
-        replaceStream(stream);
+        localStreamRef.current.getTracks().forEach((track) => track.stop());
+        localStreamRef.current = stream;
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+          localVideoRef.current.play().catch((err) => {
+            console.error("Failed to play local video:", err);
+          });
+        }
         setIsScreenSharing(false);
+        setVideoEnabled(true);
+        // Update peers
+        Object.values(peers).forEach(({ call }) => {
+          const sender = call.peerConnection
+            .getSenders()
+            .find((s) => s.track.kind === "video");
+          if (sender) {
+            sender.replaceTrack(stream.getVideoTracks()[0]);
+          }
+        });
       } else {
         // Start screen sharing
         const stream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
         });
-        replaceStream(stream);
+        localStreamRef.current.getTracks().forEach((track) => track.stop());
+        localStreamRef.current = stream;
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+          localVideoRef.current.play().catch((err) => {
+            console.error("Failed to play local video:", err);
+          });
+        }
         setIsScreenSharing(true);
-
-        // Handle when user stops sharing
-        stream.getVideoTracks()[0].onended = () => {
-          shareScreen();
-        };
+        setVideoEnabled(true);
+        // Update peers
+        Object.values(peers).forEach(({ call }) => {
+          const sender = call.peerConnection
+            .getSenders()
+            .find((s) => s.track.kind === "video");
+          if (sender) {
+            sender.replaceTrack(stream.getVideoTracks()[0]);
+          }
+        });
+        // Handle user stopping share
+        stream.getVideoTracks()[0].onended = () => shareScreen();
       }
     } catch (err) {
       console.error("Screen sharing error:", err);
+      alert("Failed to share screen. Please try again.");
     }
-  };
-
-  // Replace local stream and update peers
-  const replaceStream = (newStream) => {
-    if (localStreamRef.current) {
-      localStreamRef.current.getTracks().forEach((track) => track.stop());
-    }
-
-    localStreamRef.current = newStream;
-    if (localVideoRef.current) {
-      localVideoRef.current.srcObject = newStream;
-    }
-
-    // Update all peers with new stream
-    Object.keys(connectionsRef.current).forEach((peerId) => {
-      const call = peerInstance.current.call(peerId, newStream);
-      call.on("stream", (remoteStream) => {
-        setPeers((prev) => ({
-          ...prev,
-          [peerId]: {
-            ...prev[peerId],
-            stream: remoteStream,
-          },
-        }));
-      });
-    });
   };
 
   // Send chat message
@@ -260,14 +261,13 @@ const VideoConference = () => {
     if (!newMessage.trim()) return;
 
     const messageData = {
-      uid: peerInstance.current.id,
+      uid: peerInstance.current?.id,
       message: newMessage,
       timestamp: new Date().toISOString(),
     };
 
     setMessages((prev) => [...prev, messageData]);
 
-    // Send to all connected peers
     Object.values(connectionsRef.current).forEach((conn) => {
       conn.send(newMessage);
     });
@@ -335,25 +335,26 @@ const VideoConference = () => {
                     ref={localVideoRef}
                     muted
                     autoPlay
+                    playsInline
                     className="w-full h-64 object-cover rounded-lg border dark:border-gray-600"
                   />
-                  <p className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
-                    You
-                  </p>
                 </div>
                 {/* Remote Videos */}
                 {Object.entries(peers).map(([peerId, peerData]) => (
                   <div key={peerId} className="relative">
                     <video
                       autoPlay
+                      playsInline
                       className="w-full h-64 object-cover rounded-lg border dark:border-gray-600"
                       ref={(video) => {
-                        if (video) video.srcObject = peerData.stream;
+                        if (video && peerData.stream) {
+                          video.srcObject = peerData.stream;
+                          video.play().catch((err) => {
+                            console.error("Failed to play remote video:", err);
+                          });
+                        }
                       }}
                     />
-                    <p className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
-                      {peerData.name}
-                    </p>
                   </div>
                 ))}
               </div>
@@ -426,10 +427,8 @@ const VideoConference = () => {
                     }`}
                   >
                     <p className="text-sm text-gray-500">
-                      {msg.uid === peerInstance.current?.id
-                        ? "You"
-                        : peers[msg.uid]?.name || "Unknown"}{" "}
-                      - {new Date(msg.timestamp).toLocaleTimeString()}
+                      {msg.uid === peerInstance.current?.id ? "You" : "Other"} -{" "}
+                      {new Date(msg.timestamp).toLocaleTimeString()}
                     </p>
                     <p
                       className={`inline-block px-3 py-1 rounded-lg ${
