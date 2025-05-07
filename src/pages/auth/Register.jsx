@@ -628,7 +628,7 @@ export default function RegistrationForm() {
                 ></textarea>
               </div>
 
-              <div className="pt-2">
+              {/* <div className="pt-2">
                 <div className="flex items-center">
                   <input
                     id="terms-agree"
@@ -656,7 +656,7 @@ export default function RegistrationForm() {
                     </a>
                   </label>
                 </div>
-              </div>
+              </div> */}
             </div>
             {errors.submit && (
               <p className="mt-4 text-sm text-red-600 text-center">
