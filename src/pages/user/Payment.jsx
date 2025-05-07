@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
   faQrcode,
-  faCalendarAlt,
   faList,
 } from "@fortawesome/free-solid-svg-icons";
 import { onAuthStateChanged } from "firebase/auth";
@@ -22,11 +21,15 @@ const PaymentStatus = () => {
   const [month, setMonth] = useState("");
   const [date, setDate] = useState("");
   const [mode, setMode] = useState("Online");
+  const [amount, setAmount] = useState("");
+  const [transactionId, setTransactionId] = useState("");
   const [payments, setPayments] = useState([]);
   const [userId, setUserId] = useState(null);
 
   // Months up to current month (e.g., May 2025 → Jan-May)
-  const currentMonth = new Date().getMonth(); // 0-based (May = 4)
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-based (May = 4)
+  const currentYear = currentDate.getFullYear();
   const months = [
     "January",
     "February",
@@ -44,7 +47,7 @@ const PaymentStatus = () => {
 
   // Generate dates for selected month
   const getDaysInMonth = (monthName) => {
-    const year = new Date().getFullYear();
+    const year = currentYear;
     const monthIndex = months.indexOf(monthName);
     const days = new Date(year, monthIndex + 1, 0).getDate();
     return Array.from({ length: days }, (_, i) => {
@@ -52,6 +55,19 @@ const PaymentStatus = () => {
       return `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(
         day
       ).padStart(2, "0")}`;
+    });
+  };
+
+  // Generate table rows for all months up to current
+  const getTableRows = () => {
+    return months.map((month) => {
+      const payment = payments.find((p) => p.month === month);
+      return {
+        month,
+        amount: payment ? payment.amount || "" : "",
+        date: payment ? payment.date || "" : "",
+        status: payment ? "Done" : "Due",
+      };
     });
   };
 
@@ -67,17 +83,19 @@ const PaymentStatus = () => {
             where("uid", "==", user.uid),
             orderBy("timestamp", "desc")
           );
+          console.log("Executing query for payments with uid:", user.uid);
           const querySnapshot = await getDocs(q);
           const paymentList = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }));
-          setPayments(paymentList);
           console.log("Payment records fetched:", paymentList);
+          setPayments(paymentList);
         } catch (error) {
           console.error("Error fetching payments:", {
             code: error.code,
             message: error.message,
+            uid: user.uid,
           });
         }
       } else {
@@ -96,12 +114,18 @@ const PaymentStatus = () => {
       setMonth(months[today.getMonth()]);
       setDate(today.toISOString().split("T")[0]);
       setMode("Online");
+      setAmount("");
+      setTransactionId("");
     }
   }, [selectedOption]);
 
   const handleSubmit = async () => {
-    if (!month || !date || !mode) {
-      alert("Please fill all fields before submitting.");
+    if (!month || !date || !mode || !amount) {
+      alert("Please fill all required fields before submitting.");
+      return;
+    }
+    if (selectedOption === "want-to-pay" && !transactionId) {
+      alert("Please enter the transaction ID.");
       return;
     }
 
@@ -111,6 +135,8 @@ const PaymentStatus = () => {
         month,
         date,
         mode,
+        amount: Number(amount),
+        transactionId: transactionId || null,
         timestamp: new Date().toISOString(),
       };
       const docRef = await addDoc(collection(db, "payment"), paymentData);
@@ -121,6 +147,8 @@ const PaymentStatus = () => {
       setMonth("");
       setDate("");
       setMode("Online");
+      setAmount("");
+      setTransactionId("");
     } catch (error) {
       console.error("Error recording payment:", {
         code: error.code,
@@ -179,7 +207,7 @@ const PaymentStatus = () => {
                 value={month}
                 onChange={(e) => {
                   setMonth(e.target.value);
-                  setDate(""); // Reset date when month changes
+                  setDate("");
                 }}
                 className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
               >
@@ -227,6 +255,19 @@ const PaymentStatus = () => {
                 <option value="Offline">Offline</option>
               </select>
             </div>
+
+            {/* Amount */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Amount</label>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                placeholder="Enter Amount"
+                min="0"
+              />
+            </div>
           </div>
           <div className="flex justify-end space-x-4 mt-6">
             <button
@@ -252,6 +293,10 @@ const PaymentStatus = () => {
             <FontAwesomeIcon icon={faQrcode} className="mr-2 text-indigo-600" />
             Pay Now
           </h3>
+          <p className="text-gray-500 mb-4">
+            First scan this QR code and make payment. Then type amount &
+            transaction ID.
+          </p>
           <div className="flex flex-col md:flex-row md:space-x-6">
             <div className="mb-4 md:mb-0">
               <img
@@ -283,6 +328,29 @@ const PaymentStatus = () => {
                   {mode}
                 </p>
               </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Amount</label>
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                  placeholder="Enter Amount"
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Transaction ID
+                </label>
+                <input
+                  type="text"
+                  value={transactionId}
+                  onChange={(e) => setTransactionId(e.target.value)}
+                  className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                  placeholder="Enter Transaction ID"
+                />
+              </div>
             </div>
           </div>
           <div className="flex justify-end space-x-4 mt-6">
@@ -308,29 +376,46 @@ const PaymentStatus = () => {
           <FontAwesomeIcon icon={faList} className="mr-2 text-indigo-600" />
           Payment History
         </h3>
-        {payments.length === 0 ? (
-          <p className="text-gray-500">No payment records found.</p>
-        ) : (
-          <ul className="space-y-4">
-            {payments.map((payment) => (
-              <li
-                key={payment.id}
-                className="p-4 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600"
-              >
-                <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                  <div>
-                    <p className="font-medium">Month: {payment.month}</p>
-                    <p className="text-gray-500">Date: {payment.date}</p>
-                    <p className="text-gray-500">Mode: {payment.mode}</p>
-                  </div>
-                  <p className="text-gray-500 mt-2 md:mt-0">
-                    Recorded: {new Date(payment.timestamp).toLocaleString()}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto">
+            <thead>
+              <tr className="dark:bg-gray-700 bg-gray-100">
+                <th className="px-4 py-2 text-left text-sm font-medium">
+                  Month
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-medium">
+                  Amount
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-medium">
+                  Status
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-medium">
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {getTableRows().map((row) => (
+                <tr key={row.month} className="border-t dark:border-gray-600">
+                  <td className="px-4 py-2">{row.month}</td>
+                  <td className="px-4 py-2">{row.amount || "-"}</td>
+                  <td className="px-4 py-2">
+                    <span
+                      className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
+                        row.status === "Done"
+                          ? "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
+                          : "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100 animate-pulse"
+                      }`}
+                    >
+                      {row.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2">{row.date || "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   );
