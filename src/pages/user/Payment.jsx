@@ -26,7 +26,7 @@ const PaymentStatus = () => {
   const [payments, setPayments] = useState([]);
   const [userId, setUserId] = useState(null);
 
-  // Months up to current month (e.g., May 2025 → Jan-May)
+  // Months up to current month
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth(); // 0-based (May = 4)
   const currentYear = currentDate.getFullYear();
@@ -312,7 +312,7 @@ const PaymentStatus = () => {
           <div className="flex flex-col md:flex-row md:space-x-6">
             <div className="mb-4 md:mb-0 flex justify-center">
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                src="https://static.vecteezy.com/ti/gratis-vektor/t2/2258271-vorlage-von-qr-code-bereit-zum-scannen-mit-smartphone-illustration-vektor.jpg"
                 alt="QR Code"
                 className="w-36 h-36 sm:w-48 sm:h-48 object-contain"
               />
