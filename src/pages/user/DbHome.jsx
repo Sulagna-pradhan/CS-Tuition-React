@@ -140,9 +140,11 @@ const DashboardHome = () => {
         <div className="lg:col-span-2 rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold">Recent Activity</h3>
+            {/*
             <button className="text-sm text-indigo-600 hover:text-indigo-800">
               View All
-            </button>
+            </button> 
+            */}
           </div>
           <div className="space-y-5">
             <div className="flex">
@@ -203,9 +205,11 @@ const DashboardHome = () => {
         <div className="lg:col-span-3 rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold">Popular Stories</h3>
+            {/*
             <button className="text-sm text-indigo-600 hover:text-indigo-800">
               View All
-            </button>
+            </button> 
+            */}
           </div>
           <div className="space-y-4">
             <div className="p-4 rounded-lg dark:bg-gray-700 bg-gray-50 flex items-center">

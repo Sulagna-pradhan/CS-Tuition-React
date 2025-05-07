@@ -679,9 +679,21 @@ export default function RegistrationForm() {
               Registration Complete!
             </h2>
             <p className="text-gray-600">
-              Thank you for registering with us,{" "}
-              <span className="font-medium">{formData.name}</span>. Please
-              verify your email before login.
+              Thank you
+              <span className="font-medium"> {formData.name}</span>, for
+              registering with us.
+              <br></br>
+              <br></br>
+              <span className="text-blue-500 text-center text-xl font-bold block">
+                Process to access dashboard
+              </span>
+              <br></br>
+              <span className="text-yellow-600 font-medium">
+                1. First click "Send Email to verify" button.
+                <br />
+                2. Go to your mail verify email. <br />
+                3. Come back and login to your account.
+              </span>
             </p>
             <div className="pt-4 space-y-4">
               <button
@@ -703,22 +715,22 @@ export default function RegistrationForm() {
               )}
               <div>
                 <a
-                  href="/auth/login"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline transition-colors"
-                >
-                  Login
-                </a>
-              </div>
-              <div>
-                <a
                   href="https://mail.google.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline transition-colors"
                 >
                   Go to mail to verify
+                </a>
+              </div>
+              <div>
+                <a
+                  href="/auth/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 font-medium hover:text-indigo-800 hover:underline transition-colors"
+                >
+                  Login
                 </a>
               </div>
             </div>
