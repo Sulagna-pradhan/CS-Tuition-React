@@ -27,20 +27,14 @@ const ErrorBoundary = ({ children }) => {
 };
 
 const ChatRoom = () => {
-  const [userName, setUserName] = useState(
-    localStorage.getItem("chatUserName") || ""
-  );
-  const [isJoined, setIsJoined] = useState(
-    !!localStorage.getItem("chatUserName")
-  );
+  const [userName, setUserName] = useState("");
+  const [isJoined, setIsJoined] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [typingUsers, setTypingUsers] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
-  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
-  const [historyError, setHistoryError] = useState(null);
   const ablyInstance = useRef(null);
   const channelRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -52,7 +46,6 @@ const ChatRoom = () => {
       return;
     }
 
-    localStorage.setItem("chatUserName", userName);
     const ably = new Ably.Realtime({
       key: "_8LujQ.6_Qnyg:Hq2O50kh4x-UgTee5mOjMaoW9fpjGAT7leUo4b70Bio",
       clientId: userName,
@@ -64,6 +57,33 @@ const ChatRoom = () => {
       setIsConnected(true);
 
       channelRef.current = ably.channels.get("global-chat");
+
+      // Fetch message history
+      channelRef.current.history({ limit: 100 }, (err, result) => {
+        if (err) {
+          console.error("Failed to fetch history:", err);
+          return;
+        }
+        const historyMessages = result.items
+          .filter(
+            (msg) =>
+              msg.name === "message" &&
+              msg.data &&
+              typeof msg.data.text === "string"
+          )
+          .map((msg) => ({
+            uid: msg.clientId,
+            message: msg.data.text,
+            timestamp: msg.timestamp,
+            replyTo: msg.data.replyTo
+              ? {
+                  uid: msg.data.replyTo.uid,
+                  timestamp: msg.data.replyTo.timestamp,
+                }
+              : null,
+          }));
+        setMessages(historyMessages.reverse());
+      });
 
       // Subscribe to messages
       channelRef.current.subscribe("message", (msg) => {
@@ -118,37 +138,6 @@ const ChatRoom = () => {
         console.error("Failed to enter presence:", err);
       });
 
-      // Fetch message history
-      setIsLoadingHistory(true);
-      channelRef.current.history({ limit: 100 }, (err, result) => {
-        setIsLoadingHistory(false);
-        if (err) {
-          console.error("Failed to fetch history:", err);
-          setHistoryError("Failed to load previous messages.");
-          return;
-        }
-        console.log("History items:", result.items);
-        const historyMessages = result.items
-          .filter(
-            (msg) =>
-              msg.name === "message" &&
-              msg.data &&
-              typeof msg.data.text === "string"
-          )
-          .map((msg) => ({
-            uid: msg.clientId,
-            message: msg.data.text,
-            timestamp: msg.timestamp,
-            replyTo: msg.data.replyTo
-              ? {
-                  uid: msg.data.replyTo.uid,
-                  timestamp: msg.data.replyTo.timestamp,
-                }
-              : null,
-          }));
-        setMessages(historyMessages.reverse());
-      });
-
       setIsJoined(true);
     });
 
@@ -158,16 +147,8 @@ const ChatRoom = () => {
         "Failed to connect to Ably. Please check your API key and network."
       );
       setIsConnected(false);
-      setIsLoadingHistory(false);
     });
   };
-
-  // Auto-join if userName exists
-  useEffect(() => {
-    if (userName && !isJoined) {
-      joinChat();
-    }
-  }, []);
 
   // Send message
   const sendMessage = async () => {
@@ -283,15 +264,6 @@ const ChatRoom = () => {
                     {onlineUsers.join(", ")}
                   </p>
                 </div>
-                {/* History Status */}
-                {isLoadingHistory && (
-                  <p className="text-sm text-gray-500">
-                    Loading previous messages...
-                  </p>
-                )}
-                {historyError && (
-                  <p className="text-sm text-red-500">{historyError}</p>
-                )}
                 {/* Typing Indicators */}
                 {typingUsers.length > 0 && (
                   <p className="text-sm text-gray-500">
@@ -302,11 +274,6 @@ const ChatRoom = () => {
                 )}
                 {/* Messages */}
                 <div className="h-64 sm:h-96 overflow-y-auto p-4 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                  {messages.length === 0 &&
-                    !isLoadingHistory &&
-                    !historyError && (
-                      <p className="text-sm text-gray-500">No messages yet.</p>
-                    )}
                   {messages.map((msg, index) => (
                     <div
                       key={index}
