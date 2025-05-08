@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGraduationCap,
   faFileLines,
@@ -9,69 +9,69 @@ import {
   faCalendarDays,
   faUsers,
   faShareNodes,
-} from '@fortawesome/free-solid-svg-icons'
-import { motion } from 'framer-motion'
+} from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 const features = [
   {
-    title: 'Information',
+    title: "Information",
     icon: faGraduationCap,
-    description: 'All essential academic and institutional info in one place.',
-    link: '/infopage',
+    description: "All essential academic and institutional info in one place.",
+    link: "/infopage",
   },
   {
-    title: 'PDF Assets',
+    title: "PDF Assets",
     icon: faFileLines,
-    description: 'Download study materials, guides, and important documents.',
-    link: '/pdf',
+    description: "Download study materials, guides, and important documents.",
+    link: "/pdf",
   },
   {
-    title: 'Resources & Features',
+    title: "Resources & Features",
     icon: faWandMagicSparkles,
-    description: 'Explore tools and digital features to enhance learning.',
-    link: '/resources',
+    description: "Explore tools and digital features to enhance learning.",
+    link: "/resources",
   },
   {
-    title: 'Events',
+    title: "Events",
     icon: faCalendarDays,
-    description: 'Stay updated with upcoming seminars, workshops & fests.',
-    link: '/event',
+    description: "Stay updated with upcoming seminars, workshops & fests.",
+    link: "/event",
   },
   {
-    title: 'Students Club',
+    title: "Students Club",
     icon: faUsers,
-    description: 'Join clubs, showcase talents, and collaborate with peers.',
-    link: '#',
+    description: "Join clubs, showcase talents, and collaborate with peers.",
+    link: "/comingsoon",
   },
   {
-    title: 'Ex-Students Network',
+    title: "Ex-Students Network",
     icon: faShareNodes,
-    description: 'Reconnect with alumni and grow your professional network.',
-    link: '#',
+    description: "Reconnect with alumni and grow your professional network.",
+    link: "/comingsoon",
   },
-]
+];
 
 export default function FeaturesSection() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(entry.target)
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.2 }
-    )
+    );
 
-    const section = document.getElementById('features-section')
-    if (section) observer.observe(section)
+    const section = document.getElementById("features-section");
+    if (section) observer.observe(section);
 
     return () => {
-      if (section) observer.unobserve(section)
-    }
-  }, [])
+      if (section) observer.unobserve(section);
+    };
+  }, []);
 
   const containerVariants = {
     hidden: {},
@@ -80,12 +80,12 @@ export default function FeaturesSection() {
         staggerChildren: 0.15,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-  }
+    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
 
   return (
     <section
@@ -102,7 +102,8 @@ export default function FeaturesSection() {
             Explore Our Features
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            A powerful suite of tools, services, and networks to support every student’s journey.
+            A powerful suite of tools, services, and networks to support every
+            student’s journey.
           </p>
           <div className="w-24 h-1 bg-indigo-500 mx-auto mt-4 rounded-full"></div>
         </div>
@@ -111,7 +112,7 @@ export default function FeaturesSection() {
           className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
           variants={containerVariants}
           initial="hidden"
-          animate={isVisible ? 'show' : 'hidden'}
+          animate={isVisible ? "show" : "hidden"}
         >
           {features.map((feature, index) => (
             <motion.a
@@ -121,16 +122,21 @@ export default function FeaturesSection() {
               variants={itemVariants}
             >
               <div className="flex items-center justify-center w-14 h-14 bg-indigo-600/10 border border-indigo-600 rounded-full mb-4">
-                <FontAwesomeIcon icon={feature.icon} className="text-indigo-400 h-6 w-6" />
+                <FontAwesomeIcon
+                  icon={feature.icon}
+                  className="text-indigo-400 h-6 w-6"
+                />
               </div>
               <h3 className="text-xl font-semibold text-white group-hover:text-indigo-400 transition-colors">
                 {feature.title}
               </h3>
-              <p className="mt-2 text-gray-400 text-sm leading-relaxed">{feature.description}</p>
+              <p className="mt-2 text-gray-400 text-sm leading-relaxed">
+                {feature.description}
+              </p>
             </motion.a>
           ))}
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

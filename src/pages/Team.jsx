@@ -1,68 +1,67 @@
-'use client'
+"use client";
 
-import { useEffect, useRef, useState } from 'react'
-import { motion, useAnimation, useInView } from 'framer-motion'
+import { useEffect, useRef, useState } from "react";
+import { motion, useAnimation, useInView } from "framer-motion";
 import {
   faUsers,
   faArrowRight,
   faLink,
-} from '@fortawesome/free-solid-svg-icons'
+} from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookF,
   faInstagram,
   faTwitter,
   faGithub,
   faLinkedin,
-} from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const teamMembers = [
   {
-    name: "Dr. Sarah Johnson",
-    role: "Founder & Head Tutor",
-    bio: "PhD in Education with 15+ years teaching experience. Specializes in STEM education.",
-    image: "https://cdn.pixabay.com/photo/2023/04/10/08/02/girl-7913052_640.jpg",
-    social: { linkedin: "#", twitter: "#", github: "#", facebook: "#", instagram: "#" }
+    name: "Sanjoy Ghosh",
+    role: "Founder & Tutor",
+    bio: "Master's in Data Analytics · Google Certified Educator · B.Ed. from the University of Calcutta",
+    image:
+      "https://media.licdn.com/dms/image/v2/D5603AQEvAIqzUKuexw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1694203412946?e=2147483647&v=beta&t=Tpfq5blf1Qy60AyYc83DX0waBHX-f12CtCgcnS2cpL0",
+    social: {
+      linkedin: "#",
+      twitter: "#",
+      github: "#",
+      facebook: "#",
+      instagram: "#",
+    },
   },
   {
-    name: "Michael Chen",
-    role: "Mathematics Director",
-    bio: "Former Olympiad coach with a passion for making math accessible to all students.",
-    image: "https://cdn.pixabay.com/photo/2022/09/02/20/03/man-7428290_640.jpg",
-    social: { linkedin: "#", twitter: "#", github: "#" }
+    name: "Sulagna Pradhan",
+    role: "Creator of This Page",
+    bio: "Feel free to explore all features and reach out with any feedback or questions!",
+    bion: "I built BitLearning under the guidance of Sanjoy Sir. I'm grateful to him for trusting me with this opportunity.",
+    image: "/me.jpg",
+    social: { instagram: "#", github: "#" },
   },
-  {
-    name: "Priya Patel",
-    role: "Language Arts Specialist",
-    bio: "Master's in Literature and creative writing instructor. Helps students find their voice.",
-    image: "https://cdn.pixabay.com/photo/2022/07/31/20/00/little-boy-7356705_640.jpg",
-    social: { linkedin: "#", instagram: "#", twitter: "#" }
-  },
-  {
-    name: "David Wilson",
-    role: "Science Coordinator",
-    bio: "Research scientist turned educator who brings real-world applications into the classroom.",
-    image: "https://cdn.pixabay.com/photo/2022/08/21/03/48/smile-7400381_640.jpg",
-    social: { linkedin: "#", github: "#" }
-  }
-]
+];
 
 const SocialIcon = ({ href, icon }) => (
-  <a href={href} className="text-gray-500 hover:text-indigo-600 transition" target="_blank" rel="noopener noreferrer">
+  <a
+    href={href}
+    className="text-gray-500 hover:text-indigo-600 transition"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
     <FontAwesomeIcon icon={icon} className="w-5 h-5" />
   </a>
-)
+);
 
 export default function TeamSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
-  const controls = useAnimation()
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const controls = useAnimation();
 
   useEffect(() => {
     if (isInView) {
-      controls.start("visible")
+      controls.start("visible");
     }
-  }, [isInView])
+  }, [isInView]);
 
   const fadeUp = {
     hidden: { opacity: 0, y: 40 },
@@ -72,10 +71,10 @@ export default function TeamSection() {
       transition: {
         delay: i * 0.2,
         duration: 0.6,
-        ease: "easeOut"
-      }
-    })
-  }
+        ease: "easeOut",
+      },
+    }),
+  };
 
   return (
     <section
@@ -95,16 +94,19 @@ export default function TeamSection() {
             <span className="font-medium">Our Team</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Meet Our Expert Educators
+            The <span className="text-blue-600">Minds</span> Behind{" "}
+            <span className="text-green-600">BitLearning</span>
           </h2>
+
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Passionate professionals dedicated to unlocking every student's potential.
+            Passionate professionals dedicated to unlocking every student's
+            potential.
           </p>
           <div className="w-24 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </motion.div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 max-w-2xl mx-auto">
           {teamMembers.map((member, index) => (
             <motion.div
               key={member.name}
@@ -114,6 +116,7 @@ export default function TeamSection() {
               custom={index + 1}
               className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col"
             >
+              {/* Rest of the card content remains the same */}
               <div className="relative h-64 w-full group">
                 <img
                   src={member.image}
@@ -122,31 +125,51 @@ export default function TeamSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4">
-                  <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                  <h3 className="text-xl font-bold text-white">
+                    {member.name}
+                  </h3>
                   <p className="text-indigo-200">{member.role}</p>
                 </div>
               </div>
 
               <div className="p-6 flex-grow">
                 <p className="text-gray-600 mb-4">{member.bio}</p>
+                <p className="text-gray-600 mb-4 font-semibold">
+                  {member.bion}
+                </p>
 
                 <div className="mt-auto pt-4 border-t border-gray-100">
                   <div className="flex items-center justify-between">
                     <div className="flex space-x-3">
                       {member.social.linkedin && (
-                        <SocialIcon href={member.social.linkedin} icon={faLinkedin} />
+                        <SocialIcon
+                          href={member.social.linkedin}
+                          icon={faLinkedin}
+                        />
                       )}
                       {member.social.twitter && (
-                        <SocialIcon href={member.social.twitter} icon={faTwitter} />
+                        <SocialIcon
+                          href={member.social.twitter}
+                          icon={faTwitter}
+                        />
                       )}
                       {member.social.github && (
-                        <SocialIcon href={member.social.github} icon={faGithub} />
+                        <SocialIcon
+                          href={member.social.github}
+                          icon={faGithub}
+                        />
                       )}
                       {member.social.facebook && (
-                        <SocialIcon href={member.social.facebook} icon={faFacebookF} />
+                        <SocialIcon
+                          href={member.social.facebook}
+                          icon={faFacebookF}
+                        />
                       )}
                       {member.social.instagram && (
-                        <SocialIcon href={member.social.instagram} icon={faInstagram} />
+                        <SocialIcon
+                          href={member.social.instagram}
+                          icon={faInstagram}
+                        />
                       )}
                     </div>
                     <a
@@ -170,7 +193,9 @@ export default function TeamSection() {
           animate={controls}
           className="mt-20 bg-white rounded-xl p-8 md:p-12 shadow-lg max-w-4xl mx-auto text-center"
         >
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Join Our Team of Educators</h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            Join Our Team of Educators
+          </h3>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
             We're always looking for passionate educators to join our mission.
           </p>
@@ -192,5 +217,5 @@ export default function TeamSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
