@@ -81,7 +81,9 @@ const DashboardHome = () => {
         <div className="rounded-xl shadow-lg p-6 dark:bg-gray-800 border dark:border-gray-700 bg-white transition-colors duration-300 transform hover:scale-105 hover:shadow-xl">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-white-500 text-medium font-medium">Semester</p>
+              <p className="text-white-500 text-medium font-medium">
+                Current Semester
+              </p>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
                 {userData?.currentSemester || "Not Provided"}
               </h3>
