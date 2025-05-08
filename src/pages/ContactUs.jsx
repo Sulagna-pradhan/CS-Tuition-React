@@ -58,7 +58,7 @@ const ContactUsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div className="bg-white rounded-xl shadow-2xl p-6 md:p-8 transition hover:shadow-lg">
-            <form netlify>
+            <form name="contact" netlify>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label
