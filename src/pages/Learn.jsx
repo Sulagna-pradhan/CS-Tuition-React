@@ -15,28 +15,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const courses = [
   {
     id: 1,
-    title: "Introduction to Programming",
+    title: "Number System",
     description:
-      "Learn the fundamentals of programming with Python. Perfect for beginners looking to start their coding journey.",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    videos: "24 Videos",
+      "Introduction basic of number system in computer science and application. Here we are discuss two types of number system",
+    image: "https://img.youtube.com/vi/d1jKlVFiSTQ/maxresdefault.jpg",
+    videos: "9 Videos",
     semester: "Semester 1",
-    hours: "40 Hours",
-    category: "Programming",
+    hours: "2 Hours",
+    category: "Computer Architecture",
     progress: 0,
     href: "/course/programming",
   },
   {
     id: 2,
-    title: "Data Structures & Algorithms",
+    title: "Operating System",
     description:
-      "Master essential data structures and algorithms to solve complex problems efficiently.",
-    image:
-      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    videos: "32 Videos",
-    semester: "Semester 2",
-    hours: "50 Hours",
+      "Here we are introducing new playlist operating system in this seris we are going to discuss the entire syllabus of operating system",
+    image: "https://img.youtube.com/vi/2p-jIkKscq8/maxresdefault.jpg",
+    videos: "3 Videos",
+    semester: "Semester 4",
+    hours: "40 minutes",
     category: "Computer Science",
     progress: 0,
     href: "/course/dsa",
@@ -109,7 +107,7 @@ const semesters = [
 
 const categories = [
   "All Categories",
-  "Programming",
+  "Computer Architecture",
   "Web Development",
   "Computer Science",
   "Database",
@@ -157,7 +155,7 @@ export default function LearningPage() {
             className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
           >
             Start <span className="text-blue-600">Learning</span> With{" "}
-            <span className="text-green-600">BitLearning</span>
+            <span className="text-green-600">Us</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
