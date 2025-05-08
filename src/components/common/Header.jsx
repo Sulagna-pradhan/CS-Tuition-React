@@ -10,8 +10,9 @@ import {
   faChevronDown,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { useAuth } from "../../context/AuthContext";
 export default function Header() {
+  const { isAuthenticated } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -97,7 +98,6 @@ export default function Header() {
     { name: "Contact Us", href: "/contact" },
   ];
 
-  // Handle mouse events for desktop dropdowns
   const handleMouseEnter = (linkName, subMenuName = null) => {
     setActiveDropdown(linkName);
     setActiveSubDropdown(subMenuName);
@@ -108,7 +108,6 @@ export default function Header() {
     setActiveSubDropdown(null);
   };
 
-  // Handle mobile dropdown clicks
   const toggleMobileDropdown = (linkName) => {
     setActiveDropdown(activeDropdown === linkName ? null : linkName);
     setActiveSubDropdown(null);
@@ -246,11 +245,11 @@ export default function Header() {
             {/* Divider and CTA Button */}
             <div className="ml-4 pl-4 border-l border-gray-200 flex items-center">
               <Link
-                to="./auth/login"
+                to={isAuthenticated ? "/user" : "./auth/login"}
                 className="group flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
-                <span>Sign in</span>
+                <span>{isAuthenticated ? "Go to Dashboard" : "Sign in"}</span>
               </Link>
 
               {/* Notification Bell */}
@@ -360,12 +359,12 @@ export default function Header() {
             </nav>
             <div className="px-4 pt-3">
               <Link
-                to="./auth/login"
+                to={isAuthenticated ? "/user" : "./auth/login"}
                 className="flex items-center justify-center space-x-2 bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 text-white px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 w-full shadow-md"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
-                <span>Sign in</span>
+                <span>{isAuthenticated ? "Go to Dashboard" : "Sign in"}</span>
               </Link>
             </div>
           </div>
