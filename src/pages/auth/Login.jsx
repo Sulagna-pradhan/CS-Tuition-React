@@ -111,7 +111,7 @@ export default function LoginForm() {
             Student Login
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-            Welcome Back
+            Welcome Back 😊
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
             Sign in to access your academic resources and tools.
@@ -242,7 +242,7 @@ export default function LoginForm() {
             </form>
 
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-md text-gray-600">
                 Don't have an account?{" "}
                 <a
                   href="./register"
