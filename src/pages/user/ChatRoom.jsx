@@ -47,7 +47,7 @@ const ChatRoom = () => {
     }
 
     const ably = new Ably.Realtime({
-      key: "_8LujQ.6_Qnyg:Hq2O50kh4x-UgTee5mOjMaoW9fpjGAT7leUo4b70Bio",
+      key: import.meta.env.VITE_ABLY_APIKEY,
       clientId: userName,
     });
     ablyInstance.current = ably;
