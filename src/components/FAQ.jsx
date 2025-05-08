@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
-import { faChevronUp, faChevronDown, faQuestionCircle } from "@fortawesome/free-solid-svg-icons"; // Import specific icons
+import {
+  faChevronUp,
+  faChevronDown,
+  faQuestionCircle,
+} from "@fortawesome/free-solid-svg-icons"; // Import specific icons
 
 const FAQ = () => {
   const [faqItems, setFaqItems] = useState([
@@ -42,16 +46,15 @@ const FAQ = () => {
     <section className="bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-medium mb-4">
+            <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
+            Frequently Asked Questions
+          </div>
 
-
-<div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-medium mb-4">
-              <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
-              Frequently Asked Questions
-            </div>
-
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              Got Questions? We've Got Answers
-            </h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            Got <span className="text-orange-500">Questions?</span> We've Got{" "}
+            <span className="text-green-600">Answers</span>
+          </h2>
           <p className="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
             Find answers to common questions about our platform
           </p>
@@ -73,9 +76,7 @@ const FAQ = () => {
                   className="text-gray-500"
                 />
               </button>
-              <div
-                className={`pb-4 pr-4 ${item.open ? "block" : "hidden"}`}
-              >
+              <div className={`pb-4 pr-4 ${item.open ? "block" : "hidden"}`}>
                 <p className="text-gray-600">{item.answer}</p>
               </div>
             </div>

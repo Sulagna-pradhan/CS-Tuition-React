@@ -52,12 +52,12 @@ const Testimonials = () => {
     <section className="bg-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-        <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-medium mb-4">
-          <FontAwesomeIcon icon={faQuoteLeft} className="mr-2" />
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-medium mb-4">
+            <FontAwesomeIcon icon={faQuoteLeft} className="mr-2" />
             Student Voices
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            What Our Student Say
+            What Our <span className="text-green-600">Students</span> Say
           </h2>
           <p className="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
             Success stories from students who used our platform
@@ -68,10 +68,7 @@ const Testimonials = () => {
         <div className="mt-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-gray-50 rounded-lg p-6 relative"
-              >
+              <div key={index} className="bg-gray-50 rounded-lg p-6 relative">
                 <div className="absolute -top-4 left-4">
                   <FontAwesomeIcon
                     icon={faQuoteLeft}

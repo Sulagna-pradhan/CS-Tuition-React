@@ -1,56 +1,88 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import {
   faArrowRight,
   faMagnifyingGlassPlus,
   faImage,
-  faXmark
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function GallerySection() {
-  const [isVisible, setIsVisible] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [isVisible, setIsVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(entry.target)
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
-    )
-    const section = document.getElementById('gallery-section')
-    if (section) observer.observe(section)
+    );
+    const section = document.getElementById("gallery-section");
+    if (section) observer.observe(section);
     return () => {
-      if (section) observer.unobserve(section)
-    }
-  }, [])
+      if (section) observer.unobserve(section);
+    };
+  }, []);
 
   const galleryImages = [
-    { src: 'https://cdn.pixabay.com/photo/2025/03/15/14/21/abstract-9472319_1280.png', alt: 'Students in classroom', category: 'classroom' },
-    { src: 'https://cdn.pixabay.com/photo/2025/02/20/10/38/robin-9419575_1280.jpg', alt: 'Annual science fair', category: 'events' },
-    { src: 'https://cdn.pixabay.com/photo/2025/02/11/21/33/kingfisher-9399869_1280.jpg', alt: 'Group study session', category: 'classroom' },
-    { src: 'https://cdn.pixabay.com/photo/2023/12/29/18/23/daisy-8476666_1280.jpg', alt: 'Science lab experiment', category: 'facilities' },
-    { src: 'https://cdn.pixabay.com/photo/2025/01/31/20/09/sunflower-9373246_1280.jpg', alt: 'Sports day competition', category: 'events' },
-    { src: 'https://cdn.pixabay.com/photo/2025/01/27/19/49/grasshopper-9363974_1280.jpg', alt: 'School library', category: 'facilities' },
-    { src: 'https://cdn.pixabay.com/photo/2024/02/24/17/37/lemons-8594421_1280.jpg', alt: 'Interactive learning', category: 'classroom' },
-    { src: 'https://cdn.pixabay.com/photo/2022/09/17/21/18/butterfly-7461850_1280.jpg', alt: 'Graduation ceremony', category: 'events' },
-  ]
+    {
+      src: "https://cdn.pixabay.com/photo/2025/03/15/14/21/abstract-9472319_1280.png",
+      alt: "Students in classroom",
+      category: "classroom",
+    },
+    {
+      src: "https://cdn.pixabay.com/photo/2025/02/20/10/38/robin-9419575_1280.jpg",
+      alt: "Annual science fair",
+      category: "events",
+    },
+    {
+      src: "https://cdn.pixabay.com/photo/2025/02/11/21/33/kingfisher-9399869_1280.jpg",
+      alt: "Group study session",
+      category: "classroom",
+    },
+    {
+      src: "https://cdn.pixabay.com/photo/2023/12/29/18/23/daisy-8476666_1280.jpg",
+      alt: "Science lab experiment",
+      category: "facilities",
+    },
+    {
+      src: "https://cdn.pixabay.com/photo/2025/01/31/20/09/sunflower-9373246_1280.jpg",
+      alt: "Sports day competition",
+      category: "events",
+    },
+    {
+      src: "https://cdn.pixabay.com/photo/2025/01/27/19/49/grasshopper-9363974_1280.jpg",
+      alt: "School library",
+      category: "facilities",
+    },
+    {
+      src: "https://cdn.pixabay.com/photo/2024/02/24/17/37/lemons-8594421_1280.jpg",
+      alt: "Interactive learning",
+      category: "classroom",
+    },
+    {
+      src: "https://cdn.pixabay.com/photo/2022/09/17/21/18/butterfly-7461850_1280.jpg",
+      alt: "Graduation ceremony",
+      category: "events",
+    },
+  ];
 
   const openImageModal = (image) => {
-    setSelectedImage(image)
-    document.body.style.overflow = 'hidden'
-  }
+    setSelectedImage(image);
+    document.body.style.overflow = "hidden";
+  };
 
   const closeImageModal = () => {
-    setSelectedImage(null)
-    document.body.style.overflow = 'auto'
-  }
+    setSelectedImage(null);
+    document.body.style.overflow = "auto";
+  };
 
   return (
     <section
@@ -62,16 +94,19 @@ export default function GallerySection() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-16"
         >
           <div className="inline-flex items-center justify-center bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full mb-4">
             <FontAwesomeIcon icon={faImage} className="mr-2" />
             <span className="font-medium">Our Gallery</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Campus Life at Bright Minds</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            Captured <span className="text-green-600">Memories</span> &
+            <span className="text-orange-500"> Milestones</span>
+          </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Explore moments from our classrooms, events, and campus facilities.
+            Explore moments from our classrooms, picnic, and many more.
           </p>
           <div className="w-24 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </motion.div>
@@ -96,11 +131,16 @@ export default function GallerySection() {
                   className="self-end bg-white/90 p-2 rounded-full shadow-md hover:bg-white transition"
                   aria-label="Enlarge image"
                 >
-                  <FontAwesomeIcon icon={faMagnifyingGlassPlus} className="text-gray-800 h-5 w-5" />
+                  <FontAwesomeIcon
+                    icon={faMagnifyingGlassPlus}
+                    className="text-gray-800 h-5 w-5"
+                  />
                 </button>
                 <div className="text-white mt-3">
                   <p className="text-lg font-semibold">{image.alt}</p>
-                  <span className="bg-indigo-600 text-xs px-3 py-1 mt-1 inline-block rounded-full">{image.category}</span>
+                  <span className="bg-indigo-600 text-xs px-3 py-1 mt-1 inline-block rounded-full">
+                    {image.category}
+                  </span>
                 </div>
               </div>
             </div>
@@ -108,13 +148,16 @@ export default function GallerySection() {
         </div>
 
         {/* CTA */}
+        {/*
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.6, ease: 'easeOut' }}
+          transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
           className="mt-20 bg-white rounded-xl p-8 md:p-12 shadow-lg max-w-4xl mx-auto text-center"
         >
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">See More of Our Campus</h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            See More
+          </h3>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
             Schedule a visit to experience our learning environment firsthand.
           </p>
@@ -134,6 +177,7 @@ export default function GallerySection() {
             </a>
           </div>
         </motion.div>
+        */}
       </div>
 
       {/* Image Modal */}
@@ -162,5 +206,5 @@ export default function GallerySection() {
         </div>
       )}
     </section>
-  )
+  );
 }

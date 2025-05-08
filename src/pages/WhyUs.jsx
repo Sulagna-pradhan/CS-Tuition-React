@@ -40,7 +40,7 @@ export default function WhyUsPage() {
             Discover Tools
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-            Why Choose Us?
+            Why Choose <span className="text-blue-600">Us ?</span>
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
             Discover the values and practices that make us the preferred choice
@@ -67,9 +67,9 @@ export default function WhyUsPage() {
 
             <ul className="space-y-4 mb-8 text-gray-800">
               {[
-                "Expert Mentors & Trainers",
-                "Engaging & Practical Learning",
-                "Guaranteed Skill Improvement",
+                "Access to All Study Resources",
+                "Books, PDFs & Previous Year Papers",
+                "Boost Your Preparation Effectively",
               ].map((text, index) => (
                 <li key={index} className="flex items-center">
                   <FontAwesomeIcon
@@ -82,7 +82,7 @@ export default function WhyUsPage() {
             </ul>
 
             <a
-              href="/contact"
+              href="/auth/login"
               className="inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-500 transition rounded-md text-white font-medium"
             >
               Get Started

@@ -187,6 +187,7 @@ export default function TeamSection() {
         </div>
 
         {/* CTA Section */}
+        {/*
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -215,6 +216,7 @@ export default function TeamSection() {
             </a>
           </div>
         </motion.div>
+        */}
       </div>
     </section>
   );
