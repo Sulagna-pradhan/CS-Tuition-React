@@ -71,7 +71,7 @@ const ContactUsPage = () => {
                     type="text"
                     id="name"
                     name="name"
-                    placeholder="John Doe"
+                    placeholder="Your Name"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 shadow-sm"
                     required
                   />
@@ -87,7 +87,7 @@ const ContactUsPage = () => {
                     type="email"
                     id="email"
                     name="email"
-                    placeholder="johndoe@example.com"
+                    placeholder="example123@gmail.com"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 shadow-sm"
                     required
                   />
@@ -146,19 +146,18 @@ const ContactUsPage = () => {
                 {[
                   {
                     icon: faMapMarkerAlt,
-                    title: "Our Office",
-                    content:
-                      "123 Education Street, Knowledge City, India - 123456",
+                    title: "Our Address",
+                    content: "Kolkata",
                   },
                   {
                     icon: faPhoneAlt,
                     title: "Phone",
-                    content: "+91 123 456 7890\n+91 987 654 3210",
+                    content: "Updating Soon",
                   },
                   {
                     icon: faEnvelope,
                     title: "Email",
-                    content: "support@example.com\ninfo@example.com",
+                    content: "Updating Soon",
                   },
                 ].map(({ icon, title, content }, index) => (
                   <div key={index} className="flex items-start">
@@ -181,7 +180,7 @@ const ContactUsPage = () => {
             {/* Map */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden transition hover:shadow-2xl">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.366269835946!2d77.2270223150825!3d28.62873998242036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x52c2b7494e204dce!2sNew%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1632912345678!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d93203.9149165679!2d88.26494985854566!3d22.53556493799616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f882db4908f667%3A0x43e330e68f6c2cbc!2sKolkata%2C%20West%20Bengal!5e1!3m2!1sen!2sin!4v1746699900344!5m2!1sen!2sin"
                 width="100%"
                 height="300"
                 style={{ border: 0 }}

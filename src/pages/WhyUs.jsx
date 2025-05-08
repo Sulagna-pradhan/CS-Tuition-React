@@ -1,31 +1,31 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { motion } from 'framer-motion'
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 export default function WhyUsPage() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(entry.target)
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.2 }
-    )
+    );
 
-    const section = document.getElementById('why-us-page')
-    if (section) observer.observe(section)
+    const section = document.getElementById("why-us-page");
+    if (section) observer.observe(section);
 
     return () => {
-      if (section) observer.unobserve(section)
-    }
-  }, [])
+      if (section) observer.unobserve(section);
+    };
+  }, []);
 
   return (
     <main
@@ -39,9 +39,12 @@ export default function WhyUsPage() {
             <FontAwesomeIcon icon={faCheckCircle} className="mr-2" />
             Discover Tools
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Why Choose Us?</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+            Why Choose Us?
+          </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
-            Discover the values and practices that make us the preferred choice for thousands of learners.
+            Discover the values and practices that make us the preferred choice
+            for hundreds of learners.
           </p>
           <div className="w-24 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </div>
@@ -53,19 +56,26 @@ export default function WhyUsPage() {
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h3 className="text-3xl font-semibold mb-4 text-gray-900">We're Committed to Your Growth</h3>
+            <h3 className="text-3xl font-semibold mb-4 text-gray-900">
+              We're Committed to Your Growth
+            </h3>
             <p className="text-gray-700 mb-6 leading-relaxed">
-              Whether you're a beginner or aiming for mastery, our unique blend of expert guidance, interactive sessions, and modern techniques will help you thrive.
+              You'll get access to all essential study tools, PDF books,
+              previous year question papers, and much more — everything you need
+              to support your learning journey.
             </p>
 
             <ul className="space-y-4 mb-8 text-gray-800">
               {[
-                'Expert Mentors & Trainers',
-                'Engaging & Practical Learning',
-                'Guaranteed Skill Improvement',
+                "Expert Mentors & Trainers",
+                "Engaging & Practical Learning",
+                "Guaranteed Skill Improvement",
               ].map((text, index) => (
                 <li key={index} className="flex items-center">
-                  <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 text-indigo-600 mr-3" />
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    className="h-5 w-5 text-indigo-600 mr-3"
+                  />
                   {text}
                 </li>
               ))}
@@ -95,7 +105,9 @@ export default function WhyUsPage() {
             </div>
 
             <div className="absolute bottom-6 left-6 bg-white/90 border border-indigo-600 p-4 rounded-xl shadow-lg backdrop-blur-sm max-w-[280px]">
-              <h4 className="text-lg font-semibold text-gray-900">The Right Choice for You</h4>
+              <h4 className="text-lg font-semibold text-gray-900">
+                The Right Choice for You
+              </h4>
               <p className="text-sm text-gray-700 mt-2">
                 Join a community built on trust, quality, and impactful results.
               </p>
@@ -104,5 +116,5 @@ export default function WhyUsPage() {
         </div>
       </div>
     </main>
-  )
+  );
 }
