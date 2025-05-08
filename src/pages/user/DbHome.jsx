@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   faBook,
   faEye,
@@ -10,51 +10,10 @@ import {
   faBuildingColumns,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase/Config";
+import { useOutletContext } from "react-router-dom";
 
 const DashboardHome = () => {
-  const [userName, setUserName] = useState("User");
-  const [collegeName, setCollegeName] = useState("Unknown College");
-  const [universityName, setUniversityName] = useState("Unknown University");
-  const [currentSemester, setCurrentSemester] = useState("Unknown Semester");
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log("User authenticated:", user.uid);
-        try {
-          const userDocRef = doc(db, "users", user.uid);
-          const userDoc = await getDoc(userDocRef);
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserName(userData.name || "User");
-            setCollegeName(userData.collegeName || "Unknown College");
-            setUniversityName(userData.universityName || "Unknown University");
-            setCurrentSemester(userData.currentSemester || "Unknown Semester");
-            console.log("User data fetched:", userData);
-          } else {
-            console.log("No user document found in Firestore");
-            setUserName("User");
-            setCollegeName("Unknown College");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", {
-            code: error.code,
-            message: error.message,
-          });
-          setUserName("User");
-          setCollegeName("Unknown College");
-        }
-      } else {
-        console.log("No user authenticated, redirecting to login");
-        window.location.href = "/auth/login";
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { userData } = useOutletContext();
 
   return (
     <main className="flex-1 ml-0 md:ml-6 transition-all duration-300 dark:text-white text-gray-800">
@@ -64,7 +23,7 @@ const DashboardHome = () => {
         <div className="absolute -right-5 -bottom-5 w-24 h-24 bg-purple-500 opacity-10 rounded-full"></div>
         <div className="relative z-10">
           <h2 className="text-2xl font-bold mb-2 flex items-center">
-            <span>Welcome back, {userName}</span>
+            <span>Welcome back, {userData?.name || "User"}</span>
             <span className="ml-2 inline-block w-2 h-2 bg-green-500 rounded-full"></span>
           </h2>
           <p className="text-gray-500">
@@ -90,7 +49,7 @@ const DashboardHome = () => {
                 You are a student of
               </p>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
-                {collegeName}
+                {userData?.collegeName || "Not Provided"}
               </h3>
             </div>
             <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
@@ -108,7 +67,7 @@ const DashboardHome = () => {
                 Your University
               </p>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
-                {universityName}
+                {userData?.universityName || "Not Provided"}
               </h3>
             </div>
             <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
@@ -124,7 +83,7 @@ const DashboardHome = () => {
             <div>
               <p className="text-white-500 text-medium font-medium">Semester</p>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mt-1">
-                {currentSemester}
+                {userData?.currentSemester || "Not Provided"}
               </h3>
             </div>
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">

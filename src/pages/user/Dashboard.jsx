@@ -1,24 +1,7 @@
-import React, { useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import React from "react";
 import { auth } from "../../firebase/Config";
 
 export default function Dashboard() {
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        console.log("No user authenticated, redirecting to login");
-        window.location.href = "/auth/login";
-      } else if (!user.emailVerified) {
-        console.log("Email not verified, redirecting to login");
-        window.location.href = "/auth/login";
-      } else {
-        console.log("User authenticated and verified:", user.uid);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
   return (
     <main className="min-h-screen pt-28 pb-16 bg-gradient-to-br from-[#f0f4f8] via-[#e2e8f0] to-[#cbd5e1] text-gray-900">
       <div className="container mx-auto px-4">

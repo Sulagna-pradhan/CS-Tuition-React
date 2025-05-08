@@ -5,7 +5,6 @@ import {
   faQrcode,
   faList,
 } from "@fortawesome/free-solid-svg-icons";
-import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   addDoc,
@@ -14,7 +13,8 @@ import {
   getDocs,
   orderBy,
 } from "firebase/firestore";
-import { auth, db } from "../../firebase/Config";
+import { db } from "../../firebase/Config";
+import { useAuth } from "../../context/AuthContext";
 
 const PaymentStatus = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -25,6 +25,8 @@ const PaymentStatus = () => {
   const [transactionId, setTransactionId] = useState("");
   const [payments, setPayments] = useState([]);
   const [userId, setUserId] = useState(null);
+
+  const { currentUser } = useAuth();
 
   // Months up to current month
   const currentDate = new Date();
@@ -73,38 +75,30 @@ const PaymentStatus = () => {
 
   // Fetch payment records
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log("User authenticated:", user.uid);
-        setUserId(user.uid);
+    const fetchUserPayment = async () => {
+      if (currentUser) {
+        setUserId(currentUser.uid);
         try {
           const q = query(
             collection(db, "payment"),
-            where("uid", "==", user.uid),
+            where("uid", "==", currentUser.uid),
             orderBy("timestamp", "desc")
           );
-          console.log("Executing query for payments with uid:", user.uid);
           const querySnapshot = await getDocs(q);
           const paymentList = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }));
-          console.log("Payment records fetched:", paymentList);
           setPayments(paymentList);
         } catch (error) {
           console.error("Error fetching payments:", {
             code: error.code,
             message: error.message,
-            uid: user.uid,
           });
         }
-      } else {
-        console.log("No user authenticated, redirecting to login");
-        window.location.href = "/auth/login";
       }
-    });
-
-    return () => unsubscribe();
+    };
+    fetchUserPayment();
   }, []);
 
   // Auto-fill for "Want to Pay"

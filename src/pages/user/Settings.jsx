@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
@@ -7,7 +7,6 @@ import {
   faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-  onAuthStateChanged,
   reauthenticateWithCredential,
   EmailAuthProvider,
   deleteUser,
@@ -23,20 +22,6 @@ const SettingsPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [deletePassword, setDeletePassword] = useState("");
-
-  // Check authentication status
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("User authenticated:", user.uid);
-      } else {
-        console.log("No user authenticated, redirecting to login");
-        window.location.href = "/auth/login";
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   const reauthenticate = async (password) => {
     try {
