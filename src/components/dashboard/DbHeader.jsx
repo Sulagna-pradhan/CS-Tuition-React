@@ -9,49 +9,11 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase/Config";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/Config";
 
-const Header = ({ isSidebarOpen, toggleSidebar }) => {
+const Header = ({ userData, isSidebarOpen, toggleSidebar }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [userName, setUserName] = useState("User");
-  const [userEmail, setUserEmail] = useState("user@example.com");
-
-  // Fetch user data from Firestore
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log("User authenticated:", user.uid);
-        try {
-          const userDocRef = doc(db, "users", user.uid);
-          const userDoc = await getDoc(userDocRef);
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserName(userData.name || "User");
-            setUserEmail(userData.email || "user@example.com");
-            console.log("User data fetched:", userData);
-          } else {
-            console.log("No user document found in Firestore");
-            setUserName("User");
-            setUserEmail("user@example.com");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", {
-            code: error.code,
-            message: error.message,
-          });
-          setUserName("User");
-          setUserEmail("user@example.com");
-        }
-      } else {
-        console.log("No user authenticated, redirecting to login");
-        window.location.href = "/auth/login";
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   // Toggle user dropdown
   const toggleUserDropdown = () => {
@@ -141,7 +103,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
               </div>
               <div className="hidden md:block">
                 <p className="font-medium dark:text-white text-gray-800">
-                  {userName}
+                  {userData?.name || "User"}
                 </p>
                 <p className="text-xs text-gray-500">Student Profile</p>
               </div>
@@ -152,10 +114,10 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
               <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-xl py-2 z-50 bg-white dark:bg-gray-800 border dark:border-gray-700">
                 <div className="px-4 py-3 border-b dark:border-gray-700 border-gray-100">
                   <p className="text-sm font-medium dark:text-white text-gray-800">
-                    {userName}
+                    {userData?.name || "User"}
                   </p>
                   <p className="text-xs dark:text-gray-400 text-gray-500 truncate">
-                    {userEmail}
+                    {userData?.email || "user@example.com"}
                   </p>
                 </div>
                 <Link

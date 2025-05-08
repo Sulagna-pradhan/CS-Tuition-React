@@ -1,74 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faSave,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import {} from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase/Config";
+import { useOutletContext } from "react-router-dom";
 
 const DashboardProfile = () => {
-  const [userData, setUserData] = useState({
-    name: "User",
-    email: "user@example.com",
-    bio: "Not Provided",
-    collegeName: "Not Provided",
-    contactNumber: "Not Provided",
-    createdAt: "Not Provided",
-    currentSemester: "Not Provided",
-    parentName: "Not Provided",
-    parentPhone: "Not Provided",
-    universityName: "Not Provided",
-  });
+  const { userData, setUserData } = useOutletContext();
   const [avatar, setAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(
     "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?ga=GA1.1.1014516846.1736798059&semt=ais_hybrid&w=740"
   );
   const [isEditing, setIsEditing] = useState(false);
   const [issue, setIssue] = useState("");
-
-  // Fetch user data from Firestore
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log("User authenticated:", user.uid);
-        try {
-          const userDocRef = doc(db, "users", user.uid);
-          const userDoc = await getDoc(userDocRef);
-          if (userDoc.exists()) {
-            const data = userDoc.data();
-            setUserData({
-              name: data.name || "User",
-              email: data.email || "user@example.com",
-              bio: data.bio || "Not Provided",
-              collegeName: data.collegeName || "Not Provided",
-              contactNumber: data.contactNumber || "Not Provided",
-              createdAt: data.createdAt || "Not Provided",
-              currentSemester: data.currentSemester || "Not Provided",
-              parentName: data.parentName || "Not Provided",
-              parentPhone: data.parentPhone || "Not Provided",
-              universityName: data.universityName || "Not Provided",
-            });
-            console.log("User data fetched:", data);
-          } else {
-            console.log("No user document found in Firestore");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", {
-            code: error.code,
-            message: error.message,
-          });
-        }
-      } else {
-        console.log("No user authenticated, redirecting to login");
-        window.location.href = "/auth/login";
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   const handleSaveProfile = async () => {
     setIsEditing(false);
@@ -154,7 +103,7 @@ const DashboardProfile = () => {
             <div>
               <label className="block text-sm font-medium mb-2">Name</label>
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {userData.name}
+                {userData?.name}
               </p>
             </div>
 
@@ -162,7 +111,7 @@ const DashboardProfile = () => {
             <div>
               <label className="block text-sm font-medium mb-2">Email</label>
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {userData.email}
+                {userData?.email}
               </p>
             </div>
 
@@ -174,7 +123,7 @@ const DashboardProfile = () => {
               {isEditing ? (
                 <input
                   type="text"
-                  value={userData.contactNumber}
+                  value={userData?.contactNumber}
                   onChange={(e) =>
                     handleInputChange("contactNumber", e.target.value)
                   }
@@ -183,7 +132,7 @@ const DashboardProfile = () => {
                 />
               ) : (
                 <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                  {userData.contactNumber}
+                  {userData?.contactNumber}
                 </p>
               )}
             </div>
@@ -196,7 +145,7 @@ const DashboardProfile = () => {
               {isEditing ? (
                 <input
                   type="text"
-                  value={userData.parentName}
+                  value={userData?.parentName}
                   onChange={(e) =>
                     handleInputChange("parentName", e.target.value)
                   }
@@ -205,7 +154,7 @@ const DashboardProfile = () => {
                 />
               ) : (
                 <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                  {userData.parentName}
+                  {userData?.parentName}
                 </p>
               )}
             </div>
@@ -216,7 +165,7 @@ const DashboardProfile = () => {
                 Parent Phone
               </label>
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {userData.parentPhone}
+                {userData?.parentPhone}
               </p>
             </div>
           </div>
@@ -231,7 +180,7 @@ const DashboardProfile = () => {
               {isEditing ? (
                 <input
                   type="text"
-                  value={userData.collegeName}
+                  value={userData?.collegeName}
                   onChange={(e) =>
                     handleInputChange("collegeName", e.target.value)
                   }
@@ -240,7 +189,7 @@ const DashboardProfile = () => {
                 />
               ) : (
                 <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                  {userData.collegeName}
+                  {userData?.collegeName}
                 </p>
               )}
             </div>
@@ -253,7 +202,7 @@ const DashboardProfile = () => {
               {isEditing ? (
                 <input
                   type="text"
-                  value={userData.universityName}
+                  value={userData?.universityName}
                   onChange={(e) =>
                     handleInputChange("universityName", e.target.value)
                   }
@@ -262,7 +211,7 @@ const DashboardProfile = () => {
                 />
               ) : (
                 <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                  {userData.universityName}
+                  {userData?.universityName}
                 </p>
               )}
             </div>
@@ -275,7 +224,7 @@ const DashboardProfile = () => {
               {isEditing ? (
                 <input
                   type="text"
-                  value={userData.currentSemester}
+                  value={userData?.currentSemester}
                   onChange={(e) =>
                     handleInputChange("currentSemester", e.target.value)
                   }
@@ -284,7 +233,7 @@ const DashboardProfile = () => {
                 />
               ) : (
                 <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                  {userData.currentSemester}
+                  {userData?.currentSemester}
                 </p>
               )}
             </div>
@@ -295,7 +244,7 @@ const DashboardProfile = () => {
                 Account Created At
               </label>
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {userData.createdAt}
+                {userData?.createdAt}
               </p>
             </div>
           </div>
@@ -305,7 +254,7 @@ const DashboardProfile = () => {
             <label className="block text-sm font-medium mb-2">Bio</label>
             {isEditing ? (
               <textarea
-                value={userData.bio}
+                value={userData?.bio}
                 onChange={(e) => handleInputChange("bio", e.target.value)}
                 className="w-full p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 rows="4"
@@ -313,7 +262,7 @@ const DashboardProfile = () => {
               />
             ) : (
               <p className="p-3 rounded-lg dark:bg-gray-700 bg-gray-100 border dark:border-gray-600">
-                {userData.bio}
+                {userData?.bio}
               </p>
             )}
           </div>

@@ -11,50 +11,12 @@ import {
   faComment,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router";
-import { useEffect, useRef, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase/Config";
+import { useEffect, useRef } from "react";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/Config";
 
-const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+const Sidebar = ({ userData, isSidebarOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
-  const [userName, setUserName] = useState("User");
-  const [contactNumber, setContactNumber] = useState("Unknown Number");
-
-  // Fetch user data from Firestore
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log("User authenticated:", user.uid);
-        try {
-          const userDocRef = doc(db, "users", user.uid);
-          const userDoc = await getDoc(userDocRef);
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserName(userData.name || "User");
-            setContactNumber(userData.contactNumber || "Unknown Number");
-            console.log("User data fetched:", userData);
-          } else {
-            console.log("No user document found in Firestore");
-            setUserName("User");
-            setContactNumber("Unknown Number");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", {
-            code: error.code,
-            message: error.message,
-          });
-          setUserName("User");
-          setContactNumber("Unknown Number");
-        }
-      } else {
-        console.log("No user authenticated, redirecting to login");
-        window.location.href = "/auth/login";
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   // Handle clicks outside the sidebar
   useEffect(() => {
@@ -122,9 +84,11 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           className="w-20 h-20 rounded-full border-4 border-indigo-500 mb-4 object-cover"
         />
         <h3 className="font-bold text-xl dark:text-white text-gray-800">
-          {userName}
+          {userData?.name || "User"}
         </h3>
-        <p className="text-gray-500 text-sm">{contactNumber}</p>
+        <p className="text-gray-500 text-sm">
+          {userData?.contactNumber || "unknown number"}
+        </p>
       </div>
 
       {/* Sidebar Links */}

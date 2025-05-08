@@ -47,26 +47,13 @@ import Payment from "./pages/user/Payment";
 import VideoConference from "./pages/user/VideoConference";
 import ChatRoom from "./pages/user/ChatRoom";
 import DbLoader from "./components/dashboard/DbLoader";
+import { useAuth } from "./context/AuthContext";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const { isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("User authenticated:", user.uid);
-        setIsAuthenticated(true);
-      } else {
-        console.log("No user authenticated, redirecting to login");
-        setIsAuthenticated(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  if (isAuthenticated === null) {
+  if (isAuthenticated === undefined) {
     return <DbLoader />;
   }
 
