@@ -202,7 +202,7 @@ export default function HeroSection() {
                       <div className="text-xs font-semibold text-gray-200">
                         Lots of tools
                       </div>
-                      <div className="text-xs text-gray-400">In pne place</div>
+                      <div className="text-xs text-gray-400">In one place</div>
                     </div>
                   </div>
                 </motion.div>
