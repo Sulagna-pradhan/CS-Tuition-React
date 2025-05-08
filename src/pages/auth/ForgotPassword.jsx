@@ -78,7 +78,7 @@ export default function ForgotPassword() {
             Password Recovery
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-            Reset Your Password
+            Forgot Password? 😢
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-lg">
             Enter your email to receive a password reset link
