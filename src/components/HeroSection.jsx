@@ -122,11 +122,11 @@ export default function HeroSection() {
               </a>
 
               <a
-                href="/about"
+                href="/learn"
                 className="flex items-center px-6 py-3 border border-gray-700 hover:border-indigo-400 text-gray-300 hover:text-indigo-300 rounded-lg font-medium transition-colors"
               >
                 <FontAwesomeIcon icon={faPlay} className="mr-2 h-5 w-5" />
-                Watch Video
+                Start Learning
               </a>
             </motion.div>
 

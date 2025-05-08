@@ -27,6 +27,10 @@ import Resources from "./pages/Resources";
 import InfoPage from "./pages/InfoPage";
 import Updates from "./pages/Updates";
 import FeedBack from "./pages/FeedBack";
+import Learn from "./pages/Learn";
+
+import Programming from "./pages/course/Programming";
+import Dsa from "./pages/course/Dsa";
 
 import Productivity from "./pages/tools/Productivity";
 import Learning from "./pages/tools/Learning";
@@ -84,13 +88,17 @@ function App() {
         <Route path="infopage" element={<InfoPage />} />
         <Route path="updates" element={<Updates />} />
         <Route path="feedback" element={<FeedBack />} />
+        <Route path="learn" element={<Learn />} />
+
+        <Route path="course/programming" element={<Programming />} />
+        <Route path="course/dsa" element={<Dsa />} />
 
         {/* Productivity */}
         <Route path="tools/productivity" element={<Productivity />} />
         <Route path="tools/productivity/qrcode" element={<QrCode />} />
         <Route path="tools/productivity/todolist" element={<ToDoList />} />
 
-        {/* Productivity */}
+        {/* Learning Tools */}
         <Route path="tools/learning" element={<Learning />} />
 
         {/* Authentication routes */}
