@@ -4,7 +4,7 @@ const CCompilerPage = () => {
   return (
     <CompilerPage
       title="javascript Compiler"
-      iframeSrc="https://onecompiler.com/embed/javascript?availableLanguages=false&hideLanguageSelection=true&hideTitle=true"
+      iframeSrc="https://onecompiler.com/embed/javascript?availableLanguages=false&hideLanguageSelection=true&hideTitle=true&theme=dark"
     />
   );
 };
