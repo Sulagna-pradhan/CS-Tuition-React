@@ -33,9 +33,11 @@ import Programming from "./pages/course/Programming";
 import Dsa from "./pages/course/Dsa";
 
 import Productivity from "./pages/tools/Productivity";
-import Learning from "./pages/tools/Learning";
 import QrCode from "./pages/tools/productivity/QrCode";
 import ToDoList from "./pages/tools/productivity/ToDoList";
+
+import Learning from "./pages/tools/Learning";
+import C from "./pages/tools/learning/C";
 
 // Authentication Routes
 import Register from "./pages/auth/Register";
@@ -100,6 +102,7 @@ function App() {
 
         {/* Learning Tools */}
         <Route path="tools/learning" element={<Learning />} />
+        <Route path="tools/learning/c" element={<C />} />
 
         {/* Authentication routes */}
         <Route path="auth/register" element={<Register />} />
