@@ -30,11 +30,49 @@ export default function Resources() {
   const tools = [
     {
       title: "Online C Compiler",
-      description:
-        "Write, compile, and run code instantly in multiple programming languages.",
-      image:
-        "https://cdn.pixabay.com/photo/2018/02/27/17/40/programming-3186084_640.png",
+      description: "Write, compile, and run c code instantly in browser.",
+      image: "https://cka.collectiva.in/Content/images/CourseImages/9.png",
       href: "/tools/learning/c",
+      buttonText: "View Now",
+    },
+
+    // Java
+    {
+      title: "Online Java Compiler",
+      description: "Write, compile, and run Java code instantly in browser.",
+      image:
+        "https://www.dicslaxminagar.com/blog/wp-content/uploads/2024/10/sale-301982-article-image-1630523474787.jpeg",
+      href: "/tools/learning/java",
+      buttonText: "View Now",
+    },
+
+    // Python
+    {
+      title: "Online Python Compiler",
+      description: "Write and run Python code instantly in browser.",
+      image:
+        "https://webandcrafts.com/_next/image?url=https%3A%2F%2Fadmin.wac.co%2Fuploads%2FFeatures_Of_Python_1_f4ccd6d9f7.jpg&w=4500&q=90",
+      href: "/tools/learning/python",
+      buttonText: "View Now",
+    },
+
+    // JavaScript
+    {
+      title: "Online JavaScript Compiler",
+      description: "Write and run JavaScript code instantly in browser.",
+      image:
+        "https://bairesdev.mo.cloudinary.net/blog/2023/08/What-Is-JavaScript-Used-For.jpg?tx=w_1920,q_auto",
+      href: "/tools/learning/javascript",
+      buttonText: "View Now",
+    },
+
+    // C++
+    {
+      title: "Online C++ Compiler",
+      description: "Write, compile, and run C++ code instantly in browser.",
+      image:
+        "https://training.digigrowhub.in/wp-content/uploads/2021/02/do-coding-of-any-program-by-c-plus-plus-perfectly-and-within-time.jpg",
+      href: "/tools/learning/cpp",
       buttonText: "View Now",
     },
   ];
