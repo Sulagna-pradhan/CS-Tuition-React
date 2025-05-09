@@ -49,20 +49,21 @@ export default function Resources() {
       image: "web%20development.webp",
       href: "/features/devtools",
     },
-    {
-      title: "Entertainment",
-      description:
-        "Enjoy fun and engaging tools like music players, games, and media utilities for relaxation.",
-      image: "entertainment.avif",
-      href: "/features/entertainment",
-    },
-    {
-      title: "Extensions",
-      description:
-        "Explore Our useful and innovative browser extensions that enhance your web experience.",
-      image: "web_extensions.png",
-      href: "/features/extensions",
-    },
+
+    //{
+    // title: "Entertainment",
+    // description:
+    //  "Enjoy fun and engaging tools like music players, games, and media utilities for relaxation.",
+    // image: "entertainment.avif",
+    // href: "/features/entertainment",
+    // },
+    // {
+    //title: "Extensions",
+    // description:
+    //   "Explore Our useful and innovative browser extensions that enhance your web experience.",
+    // image: "web_extensions.png",
+    // href: "/features/extensions",
+    // },
   ];
 
   return (

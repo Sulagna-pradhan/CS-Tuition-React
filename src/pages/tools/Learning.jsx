@@ -37,6 +37,15 @@ export default function Resources() {
       href: "/tools/productivity/qrcode",
       buttonText: "View Now",
     },
+    {
+      title: "",
+      description:
+        "Write, compile, and run code instantly in multiple programming languages.",
+      image:
+        "https://cdn.pixabay.com/photo/2018/02/27/17/40/programming-3186084_640.png",
+      href: "/tools/productivity/qrcode",
+      buttonText: "View Now",
+    },
   ];
 
   return (
