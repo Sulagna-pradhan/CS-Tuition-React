@@ -42,6 +42,7 @@ import Java from "./pages/tools/learning/Java";
 import Python from "./pages/tools/learning/Python";
 import Javascript from "./pages/tools/learning/Javascript";
 import Cpp from "./pages/tools/learning/Cpp";
+import NumberSystem from "./pages/tools/learning/NumberSystem";
 
 // Authentication Routes
 import Register from "./pages/auth/Register";
@@ -111,6 +112,7 @@ function App() {
         <Route path="tools/learning/python" element={<Python />} />
         <Route path="tools/learning/javascript" element={<Javascript />} />
         <Route path="tools/learning/cpp" element={<Cpp />} />
+        <Route path="tools/learning/number-system" element={<NumberSystem />} />
 
         {/* Authentication routes */}
         <Route path="auth/register" element={<Register />} />

@@ -75,6 +75,17 @@ export default function Resources() {
       href: "/tools/learning/cpp",
       buttonText: "View Now",
     },
+
+    // Number system
+    {
+      title: "Number System Converter",
+      description:
+        "Convert between Binary, Decimal, Octal, and Hexadecimal systems instantly.",
+      image:
+        "https://static.wixstatic.com/media/c23813_bf36b83b71ee4d1b81128b2810d801e9~mv2.jpg/v1/fill/w_752,h_376,al_c,lg_1,q_80,enc_avif,quality_auto/c23813_bf36b83b71ee4d1b81128b2810d801e9~mv2.jpg",
+      href: "/tools/learning/number-system",
+      buttonText: "View Now",
+    },
   ];
 
   return (
