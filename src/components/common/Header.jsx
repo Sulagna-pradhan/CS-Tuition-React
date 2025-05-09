@@ -56,28 +56,40 @@ export default function Header() {
         },
         {
           name: "Productivity Tools",
-          href: "/features/productivity",
+          href: "/tools/productivity",
           subDropdown: [
-            { name: "Task Manager", href: "/features/productivity/tasks" },
-            { name: "Note Taking", href: "/features/productivity/notes" },
-            { name: "Calendar", href: "/features/productivity/calendar" },
-            { name: "Focus Timer", href: "/features/productivity/pomodoro" },
+            { name: "QR Code Generator", href: "/tools/productivity/qrcode" },
+            { name: "To Do List Maker", href: "/tools/productivity/todolist" },
           ],
         },
         {
           name: "Academic Tools",
-          href: "/features/academic",
+          href: "/tools/learning",
           subDropdown: [
             {
-              name: "Citation Generator",
-              href: "/features/academic/citations",
+              name: "Online C Compiler",
+              href: "/tools/learning/c",
             },
             {
-              name: "Plagiarism Checker",
-              href: "/features/academic/plagiarism",
+              name: "Online C++ Compiler",
+              href: "/tools/learning/cpp",
             },
-            { name: "Flash Cards", href: "/features/academic/flashcards" },
-            { name: "Study Planner", href: "/features/academic/planner" },
+            {
+              name: "Online Python Compiler",
+              href: "/tools/learning/python",
+            },
+            {
+              name: "Online Java Compiler",
+              href: "/tools/learning/java",
+            },
+            {
+              name: "Online JavaScript Compiler",
+              href: "/tools/learning/javascript",
+            },
+            {
+              name: "Number Conversion",
+              href: "/tools/learning/number-system",
+            },
           ],
         },
         {
@@ -91,7 +103,6 @@ export default function Header() {
           ],
         },
         { name: "Sticky Notes", href: "/features/sticky-notes" },
-        { name: "QR Code Generator", href: "/features/qr" },
         { name: "Search System", href: "/features/search" },
       ],
     },

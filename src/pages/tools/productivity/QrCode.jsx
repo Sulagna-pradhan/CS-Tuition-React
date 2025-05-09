@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHome,
+  faBackward,
   faDownload,
   faCopy,
   faQrcode,
@@ -79,15 +79,15 @@ const QRCodePage = () => {
   return (
     <div className="bg-gray-50 overflow-hidden min-h-screen">
       {/* Breadcrumb Navigation */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mt-18">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="flex items-center space-x-2">
             <li>
               <a
-                href="/"
+                href="/tools/productivity"
                 className="text-gray-500 hover:text-indigo-600 transition-colors duration-300 cursor-pointer"
               >
-                <FontAwesomeIcon icon={faHome} className="h-5 w-5" />
+                <FontAwesomeIcon icon={faBackward} className="h-5 w-5" />
                 <span className="sr-only">Home</span>
               </a>
             </li>
