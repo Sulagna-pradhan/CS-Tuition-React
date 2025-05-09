@@ -31,15 +31,16 @@ const teamMembers = [
       instagram: "#",
     },
   },
-  {
-    name: "Sulagna Pradhan",
-    role: "Creator of This Page",
-    bio: "Feel free to explore all features and reach out with any feedback or questions!",
-    bion: "I built BitLearning under the guidance of Sanjoy Sir. I'm grateful to him for trusting me with this opportunity.",
-    image: "/me.jpg",
-    social: { instagram: "#", github: "#" },
-  },
 ];
+
+const creatorInfo = {
+  name: "Sulagna Pradhan",
+  role: "Creator Of This Page",
+  bio: "Built the BitLearning platform under Sanjoy Sir's guidance",
+  bion: "I'm grateful to Sanjoy Sir for trusting me with this opportunity to create BitLearning.",
+  image: "/me.jpg",
+  social: { instagram: "#", github: "#" },
+};
 
 const SocialIcon = ({ href, icon }) => (
   <a
@@ -105,118 +106,118 @@ export default function TeamSection() {
           <div className="w-24 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </motion.div>
 
-        {/* Team Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 max-w-2xl mx-auto">
-          {teamMembers.map((member, index) => (
-            <motion.div
-              key={member.name}
-              variants={fadeUp}
-              initial="hidden"
-              animate={controls}
-              custom={index + 1}
-              className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col"
-            >
-              {/* Rest of the card content remains the same */}
-              <div className="relative h-64 w-full group">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4">
-                  <h3 className="text-xl font-bold text-white">
-                    {member.name}
-                  </h3>
-                  <p className="text-indigo-200">{member.role}</p>
-                </div>
+        {/* Primary Team Member - Centered */}
+        <div className="flex justify-center mb-16">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate={controls}
+            custom={1}
+            className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col max-w-md w-full"
+          >
+            <div className="relative h-64 w-full group">
+              <img
+                src={teamMembers[0].image}
+                alt={teamMembers[0].name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4">
+                <h3 className="text-xl font-bold text-white">
+                  {teamMembers[0].name}
+                </h3>
+                <p className="text-indigo-200">{teamMembers[0].role}</p>
               </div>
+            </div>
 
-              <div className="p-6 flex-grow">
-                <p className="text-gray-600 mb-4">{member.bio}</p>
-                <p className="text-gray-600 mb-4 font-semibold">
-                  {member.bion}
-                </p>
+            <div className="p-6 flex-grow">
+              <p className="text-gray-600 mb-4">{teamMembers[0].bio}</p>
 
-                <div className="mt-auto pt-4 border-t border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div className="flex space-x-3">
-                      {member.social.linkedin && (
-                        <SocialIcon
-                          href={member.social.linkedin}
-                          icon={faLinkedin}
-                        />
-                      )}
-                      {member.social.twitter && (
-                        <SocialIcon
-                          href={member.social.twitter}
-                          icon={faTwitter}
-                        />
-                      )}
-                      {member.social.github && (
-                        <SocialIcon
-                          href={member.social.github}
-                          icon={faGithub}
-                        />
-                      )}
-                      {member.social.facebook && (
-                        <SocialIcon
-                          href={member.social.facebook}
-                          icon={faFacebookF}
-                        />
-                      )}
-                      {member.social.instagram && (
-                        <SocialIcon
-                          href={member.social.instagram}
-                          icon={faInstagram}
-                        />
-                      )}
-                    </div>
-                    <a
-                      href="#"
-                      className="text-indigo-600 hover:text-indigo-800 transition-colors flex items-center text-sm font-medium"
-                    >
-                      <FontAwesomeIcon icon={faLink} className="w-4 h-4 mr-1" />
-                      Portfolio
-                    </a>
+              <div className="mt-auto pt-4 border-t border-gray-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex space-x-3">
+                    {teamMembers[0].social.linkedin && (
+                      <SocialIcon
+                        href={teamMembers[0].social.linkedin}
+                        icon={faLinkedin}
+                      />
+                    )}
+                    {teamMembers[0].social.twitter && (
+                      <SocialIcon
+                        href={teamMembers[0].social.twitter}
+                        icon={faTwitter}
+                      />
+                    )}
+                    {teamMembers[0].social.github && (
+                      <SocialIcon
+                        href={teamMembers[0].social.github}
+                        icon={faGithub}
+                      />
+                    )}
+                    {teamMembers[0].social.facebook && (
+                      <SocialIcon
+                        href={teamMembers[0].social.facebook}
+                        icon={faFacebookF}
+                      />
+                    )}
+                    {teamMembers[0].social.instagram && (
+                      <SocialIcon
+                        href={teamMembers[0].social.instagram}
+                        icon={faInstagram}
+                      />
+                    )}
                   </div>
+                  <a
+                    href="#"
+                    className="text-indigo-600 hover:text-indigo-800 transition-colors flex items-center text-sm font-medium"
+                  >
+                    <FontAwesomeIcon icon={faLink} className="w-4 h-4 mr-1" />
+                    Portfolio
+                  </a>
                 </div>
               </div>
-            </motion.div>
-          ))}
+            </div>
+          </motion.div>
         </div>
 
-        {/* CTA Section */}
-        {/*
+        {/* Developer Credit - Smaller and Below */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
           animate={controls}
-          className="mt-20 bg-white rounded-xl p-8 md:p-12 shadow-lg max-w-4xl mx-auto text-center"
+          custom={2}
+          className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-12"
         >
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-            Join Our Team of Educators
-          </h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            We're always looking for passionate educators to join our mission.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a
-              href="/careers"
-              className="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-500 transition rounded-md text-white font-medium shadow-md hover:shadow-lg"
-            >
-              View Open Positions
-              <FontAwesomeIcon icon={faArrowRight} className="ml-2 w-4 h-4" />
-            </a>
-            <a
-              href="/contact"
-              className="inline-flex items-center px-6 py-3 border border-gray-300 bg-white hover:border-indigo-500 text-gray-700 hover:text-indigo-600 rounded-md font-medium transition-colors shadow-sm hover:shadow-md"
-            >
-              Contact HR Team
-            </a>
+          <div className="p-6">
+            <div className="flex items-center mb-4">
+              <img
+                src={creatorInfo.image}
+                alt={creatorInfo.name}
+                className="w-16 h-16 rounded-full object-cover mr-4"
+              />
+              <div>
+                <h4 className="font-medium text-gray-900">
+                  {creatorInfo.name}
+                </h4>
+                <p className="text-sm text-indigo-600">{creatorInfo.role}</p>
+              </div>
+            </div>
+            <p className="text-gray-600 text-sm mb-4">{creatorInfo.bio}</p>
+            <p className="text-gray-500 text-sm italic">{creatorInfo.bion}</p>
+
+            <div className="flex space-x-3 mt-4">
+              {creatorInfo.social.instagram && (
+                <SocialIcon
+                  href={creatorInfo.social.instagram}
+                  icon={faInstagram}
+                />
+              )}
+              {creatorInfo.social.github && (
+                <SocialIcon href={creatorInfo.social.github} icon={faGithub} />
+              )}
+            </div>
           </div>
         </motion.div>
-        */}
       </div>
     </section>
   );
