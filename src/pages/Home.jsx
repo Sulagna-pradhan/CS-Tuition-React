@@ -5,6 +5,7 @@ import FeaturesSection from "../components/FeaturesSection";
 import Testimonials from "../components/Testimonials";
 import Newsletter from "../components/Newsletter";
 import GoToTopButton from "../components/general/GoToTopButton";
+import Actionbtn from "../components/general/Actionbtn";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,7 @@ const Home = () => {
       <Testimonials />
       <Newsletter />
       <GoToTopButton />
+      <Actionbtn />
     </div>
   );
 };
