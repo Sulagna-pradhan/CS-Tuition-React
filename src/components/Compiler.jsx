@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward, faCode } from "@fortawesome/free-solid-svg-icons";
 
 const CompilerPage = ({ title, iframeSrc }) => {
+  useEffect(() => {
+    // Disable right-click
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
+
   return (
     <div className="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800 overflow-hidden min-h-screen">
       {/* Breadcrumb Navigation */}
