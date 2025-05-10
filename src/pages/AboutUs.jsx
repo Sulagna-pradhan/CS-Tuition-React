@@ -1,9 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
 import Testimonials from "../components/Testimonials";
 import AboutSection from "../components/AboutSection";
 
@@ -42,7 +40,6 @@ const AboutUsPage = () => {
 
       {/* Testimonials Section */}
       <Testimonials />
-      
     </div>
   );
 };

@@ -164,6 +164,7 @@ const FloatingActionButton = () => {
             zIndex: 5,
           }}
           onClick={() => setIsOpen(false)}
+          aria-label="Let's Code"
         >
           <span className="text-xl">💻</span>
           <span

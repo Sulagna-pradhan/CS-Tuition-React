@@ -9,6 +9,7 @@ import {
   faCalendarDays,
   faUsers,
   faShareNodes,
+  faFlask,
 } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 
@@ -32,16 +33,17 @@ const features = [
     link: "/resources",
   },
   {
+    title: "Innovative Projects",
+    icon: faFlask,
+    description:
+      "experimental zone where learning meets innovation. explore our projects",
+    link: "/comingsoon",
+  },
+  {
     title: "Events",
     icon: faCalendarDays,
     description: "Stay updated with upcoming seminars, workshops & fests.",
     link: "/event",
-  },
-  {
-    title: "Students Club",
-    icon: faUsers,
-    description: "Join clubs, showcase talents, and collaborate with peers.",
-    link: "/comingsoon",
   },
   {
     title: "Ex-Students Network",

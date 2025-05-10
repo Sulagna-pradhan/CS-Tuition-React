@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLightbulb,
   faRocket,
@@ -10,91 +10,92 @@ import {
   faUserCheck,
   faBook,
   faGlobe,
-  faBrain
-} from '@fortawesome/free-solid-svg-icons'
-import { motion } from 'framer-motion'
+  faBrain,
+} from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 export default function InfoPage() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(entry.target)
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.2 }
-    )
+    );
 
-    const section = document.getElementById('info-page')
-    if (section) observer.observe(section)
+    const section = document.getElementById("info-page");
+    if (section) observer.observe(section);
 
     return () => {
-      if (section) observer.unobserve(section)
-    }
-  }, [])
+      if (section) observer.unobserve(section);
+    };
+  }, []);
 
   const features = [
     {
       icon: faTools,
-      title: 'Productivity Tools',
-      description: 'Access sticky notes, to-do lists, and QR generators for better efficiency.',
-      href: '/tools/productivity'
+      title: "Productivity Tools",
+      description:
+        "Access sticky notes, to-do lists, and QR generators for better efficiency.",
+      href: "/tools/productivity",
     },
     {
       icon: faBook,
-      title: 'Learning Resources',
-      description: 'Digital library, study planners, and syllabus materials.',
-      href: '/tools/learning'
+      title: "Learning Resources",
+      description: "Digital library, study planners, and syllabus materials.",
+      href: "/tools/learning",
     },
     {
       icon: faLaptopCode,
-      title: 'Development Tools',
-      description: 'Tools for web developers to streamline their projects.',
-      href: '/tools/development'
+      title: "Development Tools",
+      description: "Tools for web developers to streamline their projects.",
+      href: "/tools/development",
     },
     {
       icon: faGlobe,
-      title: 'Entertainment & Media',
-      description: 'Music player, media tools, and more for relaxation.',
-      href: '/tools/entertainment'
-    }
-  ]
+      title: "Entertainment & Media",
+      description: "Music player, media tools, and more for relaxation.",
+      href: "/tools/entertainment",
+    },
+  ];
 
   const domains = [
     {
       icon: faBrain,
-      title: 'AI / ML',
-      href: '/domains/ai-ml'
+      title: "AI / ML",
+      href: "/domains/ai-ml",
     },
     {
       icon: faLaptopCode,
-      title: 'Web Software',
-      href: '/domains/web-software'
+      title: "Web Software",
+      href: "/domains/web-software",
     },
     {
       icon: faBook,
-      title: 'Doc Site',
-      href: '/domains/doc-site'
+      title: "Doc Site",
+      href: "/domains/doc-site",
     },
     {
       icon: faGlobe,
-      title: 'API',
-      href: '/domains/api'
+      title: "API",
+      href: "/domains/api",
     },
     {
       icon: faLightbulb,
-      title: 'Physics Simulation',
-      href: '/domains/physics-simulation'
+      title: "Physics Simulation",
+      href: "/domains/physics-simulation",
     },
     {
       icon: faTools,
-      title: 'Utility Tools',
-      href: '/domains/utility-tools'
-    }
-  ]
+      title: "Utility Tools",
+      href: "/domains/utility-tools",
+    },
+  ];
 
   return (
     <main
@@ -113,10 +114,12 @@ export default function InfoPage() {
               <FontAwesomeIcon icon={faRocket} className="mr-2" />
               Info Center
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Our Aim & Vision</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+              Our Aim & Vision
+            </h2>
             <p className="text-gray-600 max-w-xl mx-auto text-lg">
-              We aim to empower students and developers by providing seamless access to powerful tools and
-              academic resources—all in one place.
+              We aim to empower students and developers by providing seamless
+              access to powerful tools and academic resources—all in one place.
             </p>
             <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
           </motion.div>
@@ -189,9 +192,11 @@ export default function InfoPage() {
           className="text-center mt-20"
         >
           <h3 className="text-2xl font-semibold mb-4">Ready to Get Started?</h3>
-          <p className="text-gray-600 mb-6">Join our community and start exploring the tools built for you!</p>
+          <p className="text-gray-600 mb-6">
+            Join our community and start exploring the tools built for you!
+          </p>
           <a
-            href="/auth/signup"
+            href="/auth/register"
             className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-medium rounded-full shadow hover:bg-indigo-700 transition"
           >
             <FontAwesomeIcon icon={faUserCheck} className="mr-2" />
@@ -200,5 +205,5 @@ export default function InfoPage() {
         </motion.div>
       </div>
     </main>
-  )
+  );
 }
