@@ -35,6 +35,8 @@ import Dsa from "./pages/course/Dsa";
 import Productivity from "./pages/tools/Productivity";
 import QrCode from "./pages/tools/productivity/QrCode";
 import ToDoList from "./pages/tools/productivity/ToDoList";
+import Calender from "./pages/tools/productivity/Calender";
+import Texttospeech from "./pages/tools/productivity/Texttospeech";
 
 import Learning from "./pages/tools/Learning";
 import C from "./pages/tools/learning/C";
@@ -106,6 +108,11 @@ function App() {
         <Route path="tools/productivity" element={<Productivity />} />
         <Route path="tools/productivity/qrcode" element={<QrCode />} />
         <Route path="tools/productivity/todolist" element={<ToDoList />} />
+        <Route path="tools/productivity/calender" element={<Calender />} />
+        <Route
+          path="tools/productivity/text-to-speech"
+          element={<Texttospeech />}
+        />
 
         {/* Learning Tools */}
         <Route path="tools/learning" element={<Learning />} />

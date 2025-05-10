@@ -49,7 +49,7 @@ export default function Resources() {
       description:
         "Convert spoken words into text in real-time for faster note-taking during lectures.",
       image: "/productivity/speechtotext.webp",
-      href: "/features/devtools",
+      href: "/tools/productivity/text-to-speech",
       buttonText: "View Now",
     },
     {
@@ -57,7 +57,7 @@ export default function Resources() {
       description:
         "Keep track of important events, deadlines, and activities with a dynamic event calendar.",
       image: "/productivity/event calender.jpeg",
-      href: "/features/calendar",
+      href: "/tools/productivity/calender",
       buttonText: "View Now",
     },
   ];
