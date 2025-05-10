@@ -12,6 +12,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { toast, Toaster } from "react-hot-toast";
 
+//lamejs for MP3 encoding
+import lamejs from "lamejs";
+
 const TextToSpeechPage = () => {
   const [text, setText] = useState("");
   const [voices, setVoices] = useState([]);
@@ -24,6 +27,10 @@ const TextToSpeechPage = () => {
   const [highlightedWord, setHighlightedWord] = useState(null);
   const synthRef = useRef(window.speechSynthesis);
   const utteranceRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const destinationRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
 
   // Load voices, theme, and history
   useEffect(() => {
@@ -62,6 +69,79 @@ const TextToSpeechPage = () => {
     localStorage.setItem("bitlearning-tts-history", JSON.stringify(history));
   }, [history]);
 
+  // Initialize audio context for recording
+  const initAudioContext = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext ||
+        window.webkitAudioContext)();
+      destinationRef.current =
+        audioContextRef.current.createMediaStreamDestination();
+      mediaRecorderRef.current = new MediaRecorder(
+        destinationRef.current.stream
+      );
+      audioChunksRef.current = [];
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorderRef.current.onstop = () => {
+        const wavBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+        convertWavToMp3(wavBlob);
+      };
+    }
+  };
+
+  // Convert WAV to MP3 using lamejs
+  const convertWavToMp3 = (wavBlob) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const arrayBuffer = reader.result;
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+      audioContext.decodeAudioData(arrayBuffer, (audioBuffer) => {
+        const mp3Encoder = new lamejs.Mp3Encoder(
+          1,
+          audioBuffer.sampleRate,
+          128
+        );
+        const samples = audioBuffer.getChannelData(0);
+        const sampleBlockSize = 1152;
+        let mp3Data = [];
+
+        for (let i = 0; i < samples.length; i += sampleBlockSize) {
+          const sampleChunk = samples.subarray(i, i + sampleBlockSize);
+          const mp3buf = mp3Encoder.encodeBuffer(
+            Float32Array.from(sampleChunk).map((x) => x * 32767)
+          );
+          if (mp3buf.length > 0) {
+            mp3Data.push(mp3buf);
+          }
+        }
+        const mp3buf = mp3Encoder.flush();
+        if (mp3buf.length > 0) {
+          mp3Data.push(mp3buf);
+        }
+
+        const mp3Blob = new Blob(mp3Data, { type: "audio/mp3" });
+        const url = URL.createObjectURL(mp3Blob);
+        setHistory((prev) => [
+          {
+            id: Date.now(),
+            text: text.slice(0, 50) + (text.length > 50 ? "..." : ""),
+            date: new Date().toLocaleString(),
+            url,
+          },
+          ...prev.slice(0, 9),
+        ]);
+        downloadAudio(url, text);
+      });
+    };
+    reader.readAsArrayBuffer(wavBlob);
+  };
+
   // Speak text
   const speak = () => {
     if (!text.trim()) {
@@ -84,7 +164,13 @@ const TextToSpeechPage = () => {
     }
     if (isSpeaking) {
       synthRef.current.cancel();
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
     }
+
+    initAudioContext();
+    mediaRecorderRef.current.start();
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = selectedVoice;
@@ -113,14 +199,9 @@ const TextToSpeechPage = () => {
     utterance.onend = () => {
       setIsSpeaking(false);
       setHighlightedWord(null);
-      setHistory((prev) => [
-        {
-          id: Date.now(),
-          text: text.slice(0, 50) + (text.length > 50 ? "..." : ""),
-          date: new Date().toLocaleString(),
-        },
-        ...prev.slice(0, 9),
-      ]);
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
       toast.success("Speech completed", {
         style: {
           background: theme === "light" ? "#fff" : "#1f2937",
@@ -132,6 +213,9 @@ const TextToSpeechPage = () => {
     utterance.onerror = (event) => {
       setIsSpeaking(false);
       setHighlightedWord(null);
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
       toast.error(`Speech error: ${event.error}`, {
         style: {
           background: theme === "light" ? "#fff" : "#1f2937",
@@ -159,6 +243,9 @@ const TextToSpeechPage = () => {
         },
       });
       console.error("Speech failed:", error);
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
     }
   };
 
@@ -166,6 +253,9 @@ const TextToSpeechPage = () => {
   const togglePause = () => {
     if (isSpeaking) {
       synthRef.current.pause();
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.pause();
+      }
       setIsSpeaking(false);
       toast.info("Speech paused", {
         style: {
@@ -175,6 +265,9 @@ const TextToSpeechPage = () => {
       });
     } else if (synthRef.current.paused) {
       synthRef.current.resume();
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.resume();
+      }
       setIsSpeaking(true);
       toast.info("Speech resumed", {
         style: {
@@ -183,6 +276,32 @@ const TextToSpeechPage = () => {
         },
       });
     }
+  };
+
+  // Download audio
+  const downloadAudio = (url, text) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `tts-${text.slice(0, 20).replace(/[^a-zA-Z0-9]/g, "")}.mp3`;
+    a.click();
+    toast.success("Audio downloaded!", {
+      style: {
+        background: theme === "light" ? "#fff" : "#1f2937",
+        color: theme === "light" ? "#1f2937" : "#f3f4f6",
+      },
+    });
+  };
+
+  // Play history item
+  const playHistoryItem = (url) => {
+    const audio = new Audio(url);
+    audio.play();
+    toast.success("Playing history item", {
+      style: {
+        background: theme === "light" ? "#fff" : "#1f2937",
+        color: theme === "light" ? "#1f2937" : "#f3f4f6",
+      },
+    });
   };
 
   // Theme toggle
@@ -549,10 +668,16 @@ const TextToSpeechPage = () => {
                         </div>
                         <div className="flex space-x-2 ml-3">
                           <button
-                            onClick={speak}
+                            onClick={() => playHistoryItem(item.url)}
                             className="text-indigo-600 hover:text-indigo-800 transform hover:scale-110 transition-all"
                           >
                             <FontAwesomeIcon icon={faPlay} />
+                          </button>
+                          <button
+                            onClick={() => downloadAudio(item.url, item.text)}
+                            className="text-green-600 hover:text-green-800 transform hover:scale-110 transition-all"
+                          >
+                            <FontAwesomeIcon icon={faDownload} />
                           </button>
                         </div>
                       </div>

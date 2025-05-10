@@ -22,6 +22,7 @@
     "dagre": "^0.8.5",
     "firebase": "^11.6.1",
     "framer-motion": "^12.6.3",
+    "lamejs": "^1.2.1",
     "lucide-react": "^0.508.0",
     "peerjs": "^1.5.4",
     "prismjs": "^1.30.0",
