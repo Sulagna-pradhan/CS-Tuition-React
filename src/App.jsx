@@ -44,6 +44,8 @@ import Javascript from "./pages/tools/learning/Javascript";
 import Cpp from "./pages/tools/learning/Cpp";
 import NumberSystem from "./pages/tools/learning/NumberSystem";
 
+import Ai from "./pages/Ai";
+
 // Authentication Routes
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
@@ -119,6 +121,10 @@ function App() {
         <Route path="auth/login" element={<Login />} />
         <Route path="auth/forgotpassword" element={<ForgotPassword />} />
         <Route path="auth/termscondition" element={<TermsCondition />} />
+      </Route>
+
+      <Route>
+        <Route path="ai" element={<Ai />} />
       </Route>
 
       {/* Protected dashboard routes under Dblayout */}
